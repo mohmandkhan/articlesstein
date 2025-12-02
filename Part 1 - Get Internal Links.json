@@ -1,0 +1,919 @@
+{
+  "name": "Part 1 - Get Internal Links",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Step 1 - Get Internal Links",
+        "height": 80,
+        "width": 528,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        80
+      ],
+      "id": "0907b025-ac0f-47a9-8ec3-3da63166c54f",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## -> Input",
+        "height": 240,
+        "width": 768,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        176
+      ],
+      "id": "e2aed2d0-db0a-4176-89fb-72659df75a10",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v2/map",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "firecrawlApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"https://{{ $('Submit Link Form').item.json['Page URL'] }}\",\n  \"search\": \"{{ $('Submit Link Form').item.json['Website Internal Links Search Category'] }}\",\n  \"limit\": {{ $('Submit Link Form').item.json['Limit (how many links to scrape)'] }},\n  \"includeSubdomains\": false,\n  \"sitemap\": \"skip\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        240
+      ],
+      "id": "2c7589b2-ff82-4e87-8c87-ae958a980daf",
+      "name": "Get Internal Links",
+      "credentials": {
+        "firecrawlApi": {
+          "id": "N71TLtxF8VV3glWm",
+          "name": "Firecrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "links",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        240
+      ],
+      "id": "e3161f32-a18c-409b-aaa0-19edee8fee7a",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        240
+      ],
+      "id": "8d3cc216-c0a0-41ed-91c7-dcedb43da845",
+      "name": "Markdown",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1504,
+        240
+      ],
+      "id": "ff66ae1e-cb31-4c2c-9a69-2f5bd8703d16",
+      "name": "Get Link Data",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=url: {{ $json.url }}\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\nData: {{ $json.data }}"
+            }
+          ]
+        },
+        "options": {
+          "systemMessage": "=## System Prompt: Content Analysis and Structured Indexing Agent\n\nYou are the **Autonomous Content Analysis and Structured Indexing Agent**. Your role is to perform expert, zero-shot analysis on provided web page content and metadata, derive critical indexing fields, and execute a structured database insertion.\n\n### 1. Primary Objective and Execution Flow\n1.  **Step 0: URL Validation:** Check if a valid `url` is provided. If the `url` is missing, null, empty, or invalid, **skip all processing** and immediately output \"Done. No URL provided - skipping database insertion.\"\n2.  **Step 1: Content Analysis (Internal Processing):** Analyze the provided `User Message` to derive the four required fields based on the content of the `Data`, `Title`, and `Description`.\n3.  **Step 2: Database Insertion (Tool Call):** Execute a single, complete call to the `insert_internal_links` tool using all six required field values (including the automatically provided `url` and `Title`).\n4.  **Step 3: Conclusive Reporting (Mandatory Final Output):** **After the `insert_internal_links` action is complete, you must conclude the entire process with a clear, concise natural language message indicating the result of the insertion (SUCCESS or FAILURE).**\n\n### 2. Constraints and Policy\n*   **URL Requirement:** A valid URL is mandatory for processing. Without it, skip all analysis and database operations.\n*   **Zero-Shot Analysis:** All synthesis, categorization, and extraction for derived fields must be done internally. You must operate exclusively on the input provided in the `User Message`.\n*   **Intermediate Output Restriction:** **Do not generate any natural language responses, commentary, or reasoning** *before* executing the tool call (or before the skip message if no URL is present). Your first generated output must be either the skip message or the `insert_internal_links` tool call.\n*   **Tool Execution:** You must include all six fields in the tool call, ensuring data integrity and adherence to the schema.\n*   **Final Output Format:** The final message should be a brief statement, e.g., \"Insertion successful.\" or \"Insertion failed due to [Reason].\" or \"Done. No URL provided - skipping database insertion.\"\n\n### 3. Data Extraction and Content Analysis\n\nYou will receive the following data structure. The `url` and `Title` are provided automatically and do not require derivation.\n```\nurl: exampl.com\nTitle: The page title example (skip if null)\nDescription: Page Description (skip if null)\nData: All page data in markdown format.\n```\n\n**If `url` is missing, null, empty, or invalid, immediately terminate processing and output the skip message.**\n\nYour analysis must strategically populate the following four fields for the `insert_internal_links` tool:\n\n| Output Field | Derivation Rule (Defined Automatically by the Model) |\n| :--- | :--- |\n| **`page_description`** | **Synthesize:** Create a concise, high-quality, and market-ready summary of the page content. If the input `Description` is present, refine it for optimization; if not, generate a new description based on the `Data`. |\n| **`primary_topic`** | **Identify:** Determine the **single, most dominant subject area or central theme** of the content. This classification must be high-level and specific (e.g., \"AI Alignment Research,\" \"B2B Marketing Strategies,\" \"Historical Atlas Review\"). |\n| **`content_type`** | **Classify:** Identify the **format, function, or genre** of the content to aid indexing (e.g., \"Technical Whitepaper,\" \"Product Specification,\" \"Opinion Editorial,\" \"Case Study\"). |\n| **`key_keywords`** | **Extract:** Generate a focused, **comma-separated list of 3 to 7 highly pertinent keywords or key phrases** derived from the body (`Data`) for effective search indexing. |\n\n### 4. Tool Specification\n\n#### `insert_internal_links` (Mandatory Action)\n*   **Arguments:** `url`, `page_title`, `page_description`, `primary_topic`, `content_type`, `key_keywords`\n*   **Sequence:** Must be called immediately after internal content analysis is complete, **only if a valid URL is present**.\n\n### Mandatory Terminal Output Instruction\n\n**Once the `insert_internal_links` tool call has been processed by the system (whether synchronously or asynchronously with the result passed back), your very last action must be a final, short message in the `assistant` role, confirming completion of the task (e.g., \"Data insertion complete. Status: SUCCESS.\").** \n\n**If no valid URL was provided, output: \"Done. No URL provided - skipping database insertion.\"**"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2352,
+        240
+      ],
+      "id": "0ab61394-d5d8-45be-9bbc-4dd36d1397d1",
+      "name": "Page Analyzer",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "8eDMUtP7P20s67XX",
+          "name": "Gemini API 10/10/2025"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86c8e84f-f9ed-4512-afe2-49d024f36501",
+              "name": "Page URL",
+              "value": "={{ $('Submit Link Form').item.json['Page URL'] }}",
+              "type": "string"
+            },
+            {
+              "id": "8569e49c-7310-40dc-a0b2-484dc72fff60",
+              "name": "internal_links_session_id",
+              "value": "={{ $('📍 Session ID').first().json.session_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        240
+      ],
+      "id": "f185ce2d-4aec-4e96-a7d4-fdf33482614e",
+      "name": "Session Data"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZnsklgmGZiqdWGjq",
+          "mode": "list",
+          "cachedResultName": "Internal Links",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/ZnsklgmGZiqdWGjq"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ $json.url }}",
+            "page_title": "={{ $json.title }}",
+            "page_description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('page_description', ``, 'string') }}",
+            "primary_topic": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('primary_topic', ``, 'string') }}",
+            "content_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('content_type', ``, 'string') }}",
+            "session_id": "={{ $('📍 Session ID').first().json.session_id }}",
+            "key_keywords": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('key_keywords', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "page_title",
+              "displayName": "page_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "page_description",
+              "displayName": "page_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "primary_topic",
+              "displayName": "primary_topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "content_type",
+              "displayName": "content_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "key_keywords",
+              "displayName": "key_keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        2608,
+        256
+      ],
+      "id": "2465bfdb-a4f3-4217-85cf-b767ffe3845a",
+      "name": "insert_internal_links"
+    },
+    {
+      "parameters": {
+        "content": "## -> Content Analysis and Structure Indexing",
+        "height": 240,
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        176
+      ],
+      "id": "13977d6c-728d-450d-80f4-65883199b640",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        240
+      ],
+      "id": "1ec43cb8-58ae-4fa5-93e9-cd355b167b89",
+      "name": "Aggregate",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "23435e54-ca23-43ce-a953-1a77e829b4e5",
+              "name": "url",
+              "value": "={{ $('Split Out').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "724208b6-80ce-4ec8-8793-c6c7226784e1",
+              "name": "title",
+              "value": "={{ $('Split Out').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "abf4c6a4-7213-48ed-8451-6a0b2d2eeab1",
+              "name": "description",
+              "value": "={{ $('Split Out').item.json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "05ee3d36-4901-43d0-b813-2cccd7d5653a",
+              "name": "data",
+              "value": "={{ $json.content.full_text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        240
+      ],
+      "id": "3da409e0-af58-46e7-97d6-f8a422b658d3",
+      "name": "Get Page Data",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "### **Internal Links Data Table Setup**\nCreate a n8n Datatable with the exact column names, data types, and inputs.\n\n**`Internal LinksData Table`**\n* `url` (string)\n* `page_title` (string)\n* `page_description` (string\n* `primary_topic` (string)\n* `content_type` (string) \n* `key_keywords` (string)\n* `session_id` (string)\n",
+        "height": 288,
+        "width": 288,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        -128
+      ],
+      "id": "d975e883-1fe7-4f1a-97f1-3318fe5474c7",
+      "name": "Sticky Note25"
+    },
+    {
+      "parameters": {
+        "content": "### **`insert_internal_links`** Tool Input\n* url: `{{ $json.url }}`\n* page_title: `{{ $json.title }}`\n* page_description: Defined automatically by the model\n* primary_topic: Defined automatically by the model\n* content_type: Defined automatically by the model\n* key_keywords: Defined automatically by the model\n* session_id: `{{ $('📍 Session ID').first().json.session_id }}`\n",
+        "height": 208,
+        "width": 512,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2624,
+        -48
+      ],
+      "id": "bfef98fc-1932-4925-9384-670a020d58a0",
+      "name": "Sticky Note26"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a736ba19-fe97-4222-bfd1-b39c431cc6b2",
+              "name": "session_id",
+              "value": "21collagen6Nov2025",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        736,
+        240
+      ],
+      "id": "7d254491-4da4-460b-8d6d-dad3ec899fb1",
+      "name": "📍 Session ID"
+    },
+    {
+      "parameters": {
+        "content": "## ->  Session Data",
+        "height": 240,
+        "width": 208,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2928,
+        176
+      ],
+      "id": "f7646f59-9277-4632-8a3b-8e791cb7e9d7",
+      "name": "Sticky Note27"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * SIMPLE N8N WEB SCRAPING PARSER\n * \n * Copy-paste this into your n8n \"Code\" node\n * Minimal configuration, maximum results\n */\n\n// ========== QUICK CONFIG (Change these 2 lines) ==========\nconst MIN_PARAGRAPH_LENGTH = 30;  // Minimum text length to keep\nconst YOUR_DOMAIN = 'collagenwise.ro';  // Your website domain\n\n// ========== PROCESSING CODE ==========\nconst results = [];\n\nfor (const item of $input.all()) {\n  // Skip empty data\n  if (!item.json.data || item.json.data.length < 100) continue;\n  \n  const content = item.json.data;\n  const lines = content.split('\\n').filter(l => l.trim());\n  \n  // Extract title\n  const titleMatch = content.match(/^#\\s+(.+)$/m);\n  const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim() : null;\n  \n  // Skip if no title and looks like navigation\n  if (!title && (content.toLowerCase().includes('menu') || \n                 content.toLowerCase().includes('navigation'))) {\n    continue;\n  }\n  \n  // Extract clean paragraphs\n  const paragraphs = [];\n  const noiseWords = ['close menu', 'privacy policy', 'cookie', 'subscribe'];\n  \n  for (const line of lines) {\n    const cleaned = line\n      .replace(/<[^>]+>/g, '')\n      .replace(/\\*\\*([^*]+)\\*\\*/g, '$1')\n      .replace(/\\[([^\\]]+)\\]\\([^\\)]+\\)/g, '$1')\n      .trim();\n    \n    // Keep only meaningful paragraphs\n    if (cleaned.length >= MIN_PARAGRAPH_LENGTH && \n        !line.startsWith('[') && \n        !line.startsWith('#') &&\n        !noiseWords.some(w => cleaned.toLowerCase().includes(w))) {\n      paragraphs.push(cleaned);\n    }\n  }\n  \n  // Skip if no content\n  if (paragraphs.length === 0) continue;\n  \n  // Extract author\n  const authorMatch = content.match(/By\\s+([A-Z][a-z]+\\s+[A-Z][a-z]+)/);\n  const author = authorMatch ? authorMatch[1] : null;\n  \n  // Extract date\n  const dateMatch = content.match(/\\b(\\d{1,2}\\s+\\w+\\s+\\d{4})\\b/);\n  const date = dateMatch ? dateMatch[0] : null;\n  \n  // Extract links\n  const links = [];\n  const linkRegex = /\\[([^\\]]+)\\]\\(([^\\)]+)\\)/g;\n  let match;\n  \n  while ((match = linkRegex.exec(content)) !== null) {\n    const text = match[1];\n    const url = match[2];\n    \n    if (url && url !== '#' && !url.includes('privacy')) {\n      links.push({ text, url });\n    }\n  }\n  \n  // Calculate stats\n  const fullText = paragraphs.join(' ');\n  const wordCount = fullText.split(/\\s+/).length;\n  \n  // Build result\n  results.push({\n    json: {\n      title: title,\n      author: author,\n      date: date,\n      content: {\n        paragraphs: paragraphs,\n        full_text: fullText\n      },\n      links: {\n        total: links.length,\n        items: links.slice(0, 10)  // First 10 links only\n      },\n      stats: {\n        word_count: wordCount,\n        paragraph_count: paragraphs.length,\n        read_time_minutes: Math.max(1, Math.round(wordCount / 200)),\n        quality: wordCount > 1000 ? 'high' : wordCount > 500 ? 'medium' : 'low'\n      }\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        240
+      ],
+      "id": "b1909854-eb7b-4001-a24c-a47f6a7f1a16",
+      "name": "Filter",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## -> Scrape Links",
+        "height": 240,
+        "width": 656,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        176
+      ],
+      "id": "375222c8-e082-45e8-bbc6-1ad394474190",
+      "name": "Sticky Note36"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2224,
+        240
+      ],
+      "id": "62650195-a303-42f1-926a-7d8cce196cac",
+      "name": "Loop"
+    },
+    {
+      "parameters": {
+        "content": "## -> ",
+        "height": 240,
+        "width": 160,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        176
+      ],
+      "id": "3f5f3737-6d9a-4d67-a507-09b2baceaaec",
+      "name": "Sticky Note37"
+    },
+    {
+      "parameters": {
+        "content": "## ->",
+        "height": 240,
+        "width": 192,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        176
+      ],
+      "id": "55f0e615-a4e6-4c39-985c-ff56b9ef8a66",
+      "name": "Sticky Note39"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/image%20(4).png)",
+        "height": 288,
+        "width": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2272,
+        -128
+      ],
+      "id": "94a0f8e8-ad13-4503-a490-08113c8948d0",
+      "name": "Sticky Note40"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1344,
+        240
+      ],
+      "id": "26836668-c7c9-469c-8e57-3c9365a6c335",
+      "name": "LooP"
+    },
+    {
+      "parameters": {
+        "content": "after you got your links, insert the `internal_links_session_id` inside the `get_internal_links` tool in part 2 (Keyword Strategist), Part 3,4 & 5 Session Data (marked with red)",
+        "height": 96,
+        "width": 438,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2704,
+        432
+      ],
+      "id": "fecdafbe-59fd-421d-a36d-8b254f29ebff",
+      "name": "Sticky Note68"
+    },
+    {
+      "parameters": {
+        "formTitle": "Internal Links Check",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Page URL",
+              "placeholder": "example.com"
+            },
+            {
+              "fieldLabel": "Website Internal Links Search Category",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Blog"
+                  },
+                  {
+                    "option": "Products"
+                  },
+                  {
+                    "option": "Services"
+                  },
+                  {
+                    "option": "Collections"
+                  },
+                  {
+                    "option": "Portfolio"
+                  },
+                  {
+                    "option": "Guides"
+                  },
+                  {
+                    "option": "Resources"
+                  },
+                  {
+                    "option": "Case Studies"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Limit (how many links to scrape)",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "10"
+                  },
+                  {
+                    "option": "20"
+                  },
+                  {
+                    "option": "30"
+                  },
+                  {
+                    "option": "40"
+                  },
+                  {
+                    "option": "50"
+                  },
+                  {
+                    "option": "60"
+                  },
+                  {
+                    "option": "80"
+                  },
+                  {
+                    "option": "100"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        240
+      ],
+      "id": "13bb98c6-d8a6-493b-9617-7fe08636bc3d",
+      "name": "Submit Link Form",
+      "webhookId": "c8c3d26a-c63e-4d53-a60d-a474461594f6"
+    },
+    {
+      "parameters": {
+        "content": "`set your own id`",
+        "height": 176,
+        "width": 166,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        208
+      ],
+      "id": "8652f0d2-0bb3-485f-aaef-f617ba351fe7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "`Play with it till you get 20-30 relevant internal links. Make edits in data tables if needed.`",
+        "height": 80,
+        "width": 288,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        80
+      ],
+      "id": "221deb07-0797-4615-880d-06f3a27466ac",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "`get Firecrawl API`",
+        "height": 176,
+        "width": 182,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        912,
+        208
+      ],
+      "id": "da08ccc0-3e3a-4953-bc47-20be744ada10",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## **Rankenstein v9 -> Step 1 - Setup Guide** 🚀\nHere’s a simple guide to get your workflow up and running.\n\n## **1. Get your Firecrawl API**\nWe are scraping our internal links using Firecrawl, just go to their website, sign-up or login and get the API key. \n* **Firecrawl**: [Firecrawl Website](https://www.firecrawl.dev/)\n\n## **2. Configure the `Page Analyzer` AI Agent**\nYou'll need to add your **Gemini** API key in the `Page Analyzer` AI Agent. You can get the API key from [Google AI Studio](https://aistudio.google.com).\n* **Model:** Gemini 2.5 Flash (or 3.0 if you are in the future)\n* **Connections:**\n  * `insert_internal_links` → **Internal Links Data Table**\n\n* Make sure its **Data Table** is linked to the correct `Internal Links Data Table` so it can insert it inside so we can use it in the next parts.\n* Please use the separate **Datatable Setup Guide** for the exact table names and columns. Getting this right is super important!\n* Save the Internal Links session ID as you will need it in the next step.",
+        "height": 512,
+        "width": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -352
+      ],
+      "id": "979d6e80-67de-4c8e-bae4-905088f24a4a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Rankenstein%20v9.png)",
+        "height": 432,
+        "width": 832,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -352
+      ],
+      "id": "2558c06d-5110-4cb4-a719-d0c4a48a84d7",
+      "name": "Sticky Note38"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/ai%20marketing%20hub.png)",
+        "height": 176,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        544
+      ],
+      "id": "4e2b785a-821e-4a13-8b3e-50e3c7b2ab9e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "**Workflow created by [@AgriciDaniel](https://www.youtube.com/@AgriciDaniel)**\n* [AI Marketing Hub](https://www.skool.com/ai-marketing-hub)\n* [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro)",
+        "height": 96,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        704
+      ],
+      "id": "63b77474-8e22-4cf2-8768-5afd75cf0808",
+      "name": "Sticky Note9"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Internal Links": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "LooP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Link Data": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Page Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_internal_links": {
+      "ai_tool": [
+        [
+          {
+            "node": "Page Analyzer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Session Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Page Data": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📍 Session ID": {
+      "main": [
+        [
+          {
+            "node": "Get Internal Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "LooP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Page Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LooP": {
+      "main": [
+        [
+          {
+            "node": "Get Page Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Link Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Link Form": {
+      "main": [
+        [
+          {
+            "node": "📍 Session ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0e7acc67-0ac0-4240-b5c7-d89d2d7ffa5a",
+  "meta": {
+    "instanceId": "1ee7b11b3a4bb285563e32fdddf3fbac26379ada529b942ee7cda230735046a1"
+  },
+  "id": "wWbQwgMSS6DojxNA",
+  "tags": []
+}

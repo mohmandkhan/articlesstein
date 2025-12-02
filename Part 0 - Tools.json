@@ -1,0 +1,1418 @@
+{
+  "name": "Part 0 - Tools",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "function"
+            },
+            {
+              "name": "keyword"
+            },
+            {
+              "name": "url"
+            },
+            {
+              "name": "location_code"
+            },
+            {
+              "name": "language_code"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -960,
+        880
+      ],
+      "id": "3f07e045-c5df-4336-b39d-6972fe254bbd",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8d7d3035-3a57-47ee-b1d1-dd7bfcab9114",
+                    "leftValue": "serp_search",
+                    "rightValue": "={{ $json.function }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "serp_search"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9c5fd8f8-b796-49c2-b881-b3121ed6033f",
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "=suggested_keywords",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "suggested_keywords"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d51fd6e6-51e4-410d-bce8-4a28d55be3ed",
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "keyword_overview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "keyword_overview"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bb2c23eb-862d-4582-961e-5a8d8338842c",
+                    "leftValue": "ai_mode",
+                    "rightValue": "={{ $json.function }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ai_mode"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4c1ce50b-129d-432b-9992-1e4c88ed8ef7",
+                    "leftValue": "page_ranked_keywords",
+                    "rightValue": "={{ $json.function }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "page_ranked_keywords"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3a17d99f-8706-43f9-8b64-96405d0585b5",
+                    "leftValue": "get_business_ranked_keywords",
+                    "rightValue": "={{ $json.function }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get_business_ranked_keywords"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -688,
+        816
+      ],
+      "id": "ba70d9a3-a72a-4931-be4c-68f729fa9c7f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/dataforseo_labs/google/ranked_keywords/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"target\": \"{{ $json.url }}\",\n    \"location_code\": {{ $json.location_code }},\n    \"language_code\": \"{{ $json.language_code }}\",\n    \"limit\": 100\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        1472
+      ],
+      "id": "b677a142-1f0f-4e6e-829f-685403f6940e",
+      "name": "Get Ranked Keywords",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "tasks[0].result[0].items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1472
+      ],
+      "id": "9aa7a6f4-927d-41e5-8138-ff8a54d41ae0",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f8af75-a560-457b-bf79-e9f5b161cc30",
+              "name": "Keyword",
+              "value": "={{ $json.keyword_data.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "b6387b35-6fe1-4843-9c44-7c86451fef72",
+              "name": "search_volume",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "65a3acda-c5dd-420b-8ad6-7900f129472b",
+              "name": "intent",
+              "value": "={{ $json.keyword_data.search_intent_info.main_intent }}",
+              "type": "string"
+            },
+            {
+              "id": "bb0dcc10-584e-427c-86ea-4e91492a615a",
+              "name": "keyword_difficulty",
+              "value": "={{ $json.keyword_data.keyword_properties.keyword_difficulty }}",
+              "type": "number"
+            },
+            {
+              "id": "74c37ad6-7fe0-404e-8158-e351fb397d03",
+              "name": "competition_level",
+              "value": "={{ $json.keyword_data.keyword_info.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "f390d39f-b464-403b-a5f5-8071dd930b19",
+              "name": "competition_score",
+              "value": "={{ $json.keyword_data.keyword_info.competition }}",
+              "type": "number"
+            },
+            {
+              "id": "a552b665-54d0-4bab-bf9f-770969659cd7",
+              "name": "cpc",
+              "value": "={{ $json.keyword_data.keyword_info.cpc }}",
+              "type": "number"
+            },
+            {
+              "id": "9ef50c56-4b53-4150-a27c-1135cfe33d1a",
+              "name": "low_top_of_page_bid",
+              "value": "={{ $json.keyword_data.keyword_info.low_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "5a1d3517-a048-4bad-9da7-8c1476644c6f",
+              "name": "high_top_of_page_bid",
+              "value": "={{ $json.keyword_data.keyword_info.high_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "59dfd57f-82c6-48e8-a475-cfe2c93cdf41",
+              "name": "monthly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.monthly }}",
+              "type": "number"
+            },
+            {
+              "id": "87ab36e8-2bc0-4f1a-9467-4e09c59c2d4f",
+              "name": "quarterly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.quarterly }}",
+              "type": "number"
+            },
+            {
+              "id": "f00e38e3-a1a8-4f45-9f0c-e83d4077133c",
+              "name": "yearly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.yearly }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        1472
+      ],
+      "id": "22cd0239-04bc-44e5-a32e-b33ece651619",
+      "name": "Prepare Ranked Keywords"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/serp/google/organic/live/advanced",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"keyword\": \"{{ $json.keyword.replace(/[:'\"\\\\/]/g, '') }}\",\n    \"location_code\": {{ $json.location_code }},\n    \"language_code\": \"{{ $json.language_code }}\",\n    \"depth\": 10,\n    \"group_organic_results\": true,\n    \"load_async_ai_overview\": true,\n    \"people_also_ask_click_depth\": 1\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        256
+      ],
+      "id": "09f98d05-9cbd-48f7-923d-0a3a0a512788",
+      "name": "SERP Google",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## SERP Google",
+        "height": 272,
+        "width": 688,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        176
+      ],
+      "id": "21f3f117-9747-4113-8525-0b9228e9ece0",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "97ef7ee0-bc97-4089-bc37-c0545e28ed9f",
+              "name": "platform",
+              "value": "={{ $json.tasks[0].data.se }}",
+              "type": "string"
+            },
+            {
+              "id": "9299e6bb-bd36-4691-bc6c-655795a6226e",
+              "name": "type",
+              "value": "={{ $json.tasks[0].data.se_type }}",
+              "type": "string"
+            },
+            {
+              "id": "2dc26c8e-713c-4a59-a353-9d9259109e74",
+              "name": "keyword",
+              "value": "={{ $json.tasks[0].data.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "84c9be31-8f1d-4a67-9d13-897910d7ec18",
+              "name": "results",
+              "value": "={{ $json.tasks[0].result }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        16,
+        256
+      ],
+      "id": "be95f873-acc5-4ee1-84fa-2a18714e2ea4",
+      "name": "Prepare SERP output"
+    },
+    {
+      "parameters": {
+        "content": "# Google Organic Search API\n\nThis API lets you retrieve real-time Google search results with a wide range of parameters and custom settings.  \nThe response includes structured data for all available SERP features, along with a direct URL to the search results page.  \n\n👉 [Documentation](https://docs.dataforseo.com/v3/serp/overview/)\n",
+        "height": 272,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        176
+      ],
+      "id": "fa634056-4d73-4413-9195-acf5e4559ac9",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/serp/google/ai_mode/live/advanced",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"keyword\": \"{{ $json.keyword }}\",\n    \"location_code\": {{ $json.location_code }},\n    \"language_code\": \"{{ $json.language_code }}\",\n    \"device\": \"mobile\",\n    \"os\": \"android\"\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        1168
+      ],
+      "id": "ed3d86d5-fcc4-449e-a1b6-30b7b914c68b",
+      "name": "AI Mode",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI Mode",
+        "height": 272,
+        "width": 512,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        1088
+      ],
+      "id": "fd9cf714-0ef1-4ef6-9366-3e0f9a75ac2c",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b822f458-ebf2-4a37-9906-b6a2606e6106",
+              "name": "keyword",
+              "value": "={{ $json.tasks[0].data.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "10484675-b107-4157-bc7e-b942d8cdb5d2",
+              "name": "result",
+              "value": "={{ $json.tasks[0].result[0].items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        16,
+        1168
+      ],
+      "id": "257c57c0-e56c-4b4e-b2ba-9c1746f53f84",
+      "name": "Prepare AI Mode Output"
+    },
+    {
+      "parameters": {
+        "content": "# Google AI Mode API\n\nThis API provides AI-generated search result summaries and insights from Google.  \nIt returns detailed explanations, overviews, and related information based on search queries, with parameters to customize the AI overview.  \n\n👉 [Documentation](https://docs.dataforseo.com/v3/serp/google/ai_mode/overview/)\n",
+        "height": 272,
+        "width": 496,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        1088
+      ],
+      "id": "cc082711-b132-452a-966c-fd81adb69a53",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "## Page Ranked Keywords",
+        "height": 272,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        1392
+      ],
+      "id": "7be42f3f-d7a0-4be5-80b4-5f3b960eaac6",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "# Google Ranked Keywords API\n\nThis API provides the list of keywords that any domain or webpage is ranking for.  \nIt includes keyword positions, related SERP elements, impressions, monthly searches, and other relevant data.  \n\n👉 [Documentation](https://docs.dataforseo.com/v3/dataforseo_labs/google/ranked_keywords/live/)\n",
+        "height": 272,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        432,
+        1392
+      ],
+      "id": "75ca1a8d-0adc-4e50-98c0-9b74983f3bbc",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "## Input",
+        "height": 384,
+        "width": 544,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        752
+      ],
+      "id": "9991d75f-66c0-483f-ad7d-caa64adabacb",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b865f4a0-b4c3-4dde-bf18-3da933ab21af",
+              "name": "platform",
+              "value": "={{ $json.platform }}",
+              "type": "string"
+            },
+            {
+              "id": "476e07ca-ccf6-43d4-acb4-4cc905464314",
+              "name": "type",
+              "value": "={{ $json.type }}",
+              "type": "string"
+            },
+            {
+              "id": "f1a14eb8-9f10-4198-bbc7-17091532b38e",
+              "name": "keyword",
+              "value": "={{ $json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "181791a0-1d88-481c-8d98-a86242bb2135",
+              "name": "results",
+              "value": "={{ $json.results[0].items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        256
+      ],
+      "id": "b9d06f6c-4f46-4603-bc8e-16dbce097c92",
+      "name": "Sort Results"
+    },
+    {
+      "parameters": {
+        "content": "## Get Business Ranked Keywords Filtered Data Table",
+        "height": 272,
+        "width": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        1696
+      ],
+      "id": "c2401ec7-bfa2-4299-a8ff-03716400af89",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "keyword",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        160,
+        1776
+      ],
+      "id": "212e64f7-d9d2-42ad-8e41-ed8356b0e5f4",
+      "name": "Aggregate3"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "JHK1BmSdiqP7OZrl",
+          "mode": "list",
+          "cachedResultName": "Page Ranked Keywords",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/JHK1BmSdiqP7OZrl"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "keyValue": "={{ $json.keyword }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        1776
+      ],
+      "id": "e7b0e053-97c9-4db8-919c-b49dcf4c693a",
+      "name": "Get Page Ranked Keywords"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a7aea11-e441-4d70-9174-0d5f3119e08b",
+              "name": "keyword",
+              "value": "={{ $json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "9202893f-9868-4bce-b882-76e62037edfb",
+              "name": "search_volume",
+              "value": "={{ $json.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "1ac081f8-709e-4250-a0bc-fc0a5cf624bd",
+              "name": "intent",
+              "value": "={{ $json.intent }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        1776
+      ],
+      "id": "001a84ba-b13b-4ebd-a4fa-c7a62780ea4a",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/dataforseo_labs/google/keyword_suggestions/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"keyword\": \"{{ $json.keyword }}\",\n    \"location_code\": {{ $json.location_code }},\n    \"language_code\": \"{{ $json.language_code }}\",\n    \"include_seed_keyword\": false,\n    \"include_serp_info\": false,\n    \"ignore_synonyms\": false,\n    \"include_clickstream_data\": false,\n    \"exact_match\": false,\n    \"limit\": 50\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -208,
+        544
+      ],
+      "id": "a73f83d3-4507-4e02-bbd5-4f906838b93f",
+      "name": "Suggested Keywords",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "tasks[0].result[0].items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        544
+      ],
+      "id": "9a2cd8f8-c340-4d03-b25a-80162767c151",
+      "name": "Split3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "43588628-34f3-4e33-9a99-c272bc69b8b5",
+              "name": "keyword",
+              "value": "={{ $json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "a63c1fe8-52ce-4f90-b333-41d08f7a5c34",
+              "name": "search_volume",
+              "value": "={{ $json.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "b7aab553-dadd-4de8-ae4f-130ec5c3dd5e",
+              "name": "intent",
+              "value": "={{ $json.intent }}",
+              "type": "string"
+            },
+            {
+              "id": "4e997656-f787-457f-b6d7-fbffb8d9f43b",
+              "name": "cpc",
+              "value": "={{ $json.cpc }}",
+              "type": "number"
+            },
+            {
+              "id": "a6ab76ff-b382-4420-9070-b66476ee0e98",
+              "name": "competition_level",
+              "value": "={{ $json.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "fc76583a-bae1-401c-97ba-27cc69a9bd6e",
+              "name": "search_volume_trend_monthly",
+              "value": "={{ $json.search_volume_trend_monthly }}",
+              "type": "number"
+            },
+            {
+              "id": "3dbca20d-d26f-4b73-9fbd-8c3fef788994",
+              "name": "search_volume_trend_quarterly",
+              "value": "={{ $json.search_volume_trend_quarterly }}",
+              "type": "number"
+            },
+            {
+              "id": "febfbc97-ff71-415d-8ce7-cb0ab34b5f20",
+              "name": "search_volume_trend_yearly",
+              "value": "={{ $json.search_volume_trend_yearly }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        544
+      ],
+      "id": "7a9b2e0d-a7b1-49f4-9138-2557a7c4e0a9",
+      "name": "Arrange2"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "related_keyword",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        576,
+        544
+      ],
+      "id": "8d320d42-84eb-432a-939e-7d6e050afcdb",
+      "name": "Aggregate4"
+    },
+    {
+      "parameters": {
+        "content": "## Suggested Keywords",
+        "height": 272,
+        "width": 1072,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        480
+      ],
+      "id": "24c32472-b17e-4258-94c2-a7f9d23a3c38",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "# Keyword Suggestions API\n\nThe Keyword Suggestions endpoint returns long-tail search queries that **contain** the seed keyword you provide (words can appear before, after, or inside the seed phrase).\nFor each suggested query you receive metrics such as last month’s search volume, 12-month volume trend, current CPC and competition values, plus optional SERP details when requested.\n\n👉 [Documentation](https://docs.dataforseo.com/v3/dataforseo_labs/google/keyword_suggestions/live)",
+        "height": 272,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        784,
+        480
+      ],
+      "id": "a5bcd422-65b0-4333-9278-380e0b9b4c70",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/dataforseo_labs/google/keyword_overview/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"keywords\": [\n      \"{{ $json.keyword }}\"\n    ],\n    \"location_code\": {{ $json.location_code }},\n    \"language_code\": \"{{ $json.language_code }}\",\n    \"include_serp_info\": false,\n    \"include_clickstream_data\": false\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        864
+      ],
+      "id": "7ce86024-13d6-4798-97de-d5625820501d",
+      "name": "Keyword Overview",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Keyword Overview",
+        "height": 272,
+        "width": 512,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        784
+      ],
+      "id": "cc755216-5e31-4f47-a6bc-855f0c9895b9",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "# Google Keyword Overview API\n\nThis API provides Google keyword data for specified keywords.  \nIt returns CPC, competition, search volume, search intent, monthly searches, SERP and backlink data, and clickstream insights.  \n\n👉 [Documentation](https://docs.dataforseo.com/v3/dataforseo_labs/google/keyword_overview/live/)\n",
+        "height": 272,
+        "width": 448,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        784
+      ],
+      "id": "cfc7c189-bd88-4f9a-bd36-7c9dbf3f4a0f",
+      "name": "Sticky Note25"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "25c01cbb-bd3e-4607-984a-3b58b284a7dc",
+              "name": "keyword",
+              "value": "={{ $json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "e2dd32a3-afc5-42ec-9ac9-647aa5024fc6",
+              "name": "competition",
+              "value": "={{ $json.keyword_info.competition }}",
+              "type": "number"
+            },
+            {
+              "id": "8689f9d7-17ef-4f09-925b-62a4eb4ea008",
+              "name": "competition_level",
+              "value": "={{ $json.keyword_info.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "506e4024-7850-4e14-94b3-61aafdc4468e",
+              "name": "cpc",
+              "value": "={{ $json.keyword_info.cpc }}",
+              "type": "number"
+            },
+            {
+              "id": "1c3dc361-8380-444e-ad39-c181e15f4729",
+              "name": "search_volume",
+              "value": "={{ $json.keyword_info.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "8ded6a63-21e8-4c34-b083-e12e67fb035b",
+              "name": "low_top_of_page_bid",
+              "value": "={{ $json.keyword_info.low_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "7f2537ba-9502-4eff-be69-68600fe029e5",
+              "name": "high_top_of_page_bid",
+              "value": "={{ $json.keyword_info.high_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "295145a9-37aa-45ae-a5d4-3764919ec79e",
+              "name": "search_volume_trend_monthly",
+              "value": "={{ $json.keyword_info.search_volume_trend.monthly }}",
+              "type": "number"
+            },
+            {
+              "id": "35f16ee7-6639-4230-ad72-b7cbaadf9bf8",
+              "name": "search_volume_trend_quarterly",
+              "value": "={{ $json.keyword_info.search_volume_trend.quarterly }}",
+              "type": "number"
+            },
+            {
+              "id": "6bc9707c-2790-490d-bc7e-84a143fa7ed2",
+              "name": "search_volume_trend_yearly",
+              "value": "={{ $json.keyword_info.search_volume_trend.yearly }}",
+              "type": "number"
+            },
+            {
+              "id": "771bcb31-b0eb-40d5-b8e5-053655899f5f",
+              "name": "difficulty",
+              "value": "={{ $json.keyword_properties.keyword_difficulty }}",
+              "type": "number"
+            },
+            {
+              "id": "ced5ef90-1aba-49dc-96d4-209a4bfd9c4e",
+              "name": "intent",
+              "value": "={{ $json.search_intent_info.main_intent }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        544
+      ],
+      "id": "30dea2a5-a6b1-4af7-8e99-ea1cc5a1c8cf",
+      "name": "Prepare suggested Keywords"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "22d80579-d2df-442f-85f1-549a1e479bb7",
+              "name": "keyword",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "ad28a74a-2ea2-4f5f-a015-23df519282b7",
+              "name": "search_volume",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "cf92a017-f527-42b8-aa1d-8154b1942d00",
+              "name": "competition_level",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "5ce6fe69-3d7a-442e-a25d-5dbc47558881",
+              "name": "competition_score",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.competition }}",
+              "type": "number"
+            },
+            {
+              "id": "36867ca4-6337-4659-9147-cc34a6f6a8fa",
+              "name": "cpc",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.cpc }}",
+              "type": "number"
+            },
+            {
+              "id": "41a327b1-39ec-4d96-b998-78e83ae14514",
+              "name": "monthly_search_volume_trend",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.search_volume_trend.monthly }}",
+              "type": "number"
+            },
+            {
+              "id": "71c15bf6-f308-413a-b5ed-384f55e06676",
+              "name": "quarterly_search_volume_trend",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.search_volume_trend.quarterly }}",
+              "type": "number"
+            },
+            {
+              "id": "81b7a5bc-2e61-45d9-8d0d-8613ea675299",
+              "name": "yearly_search_volume_trend",
+              "value": "={{ $json.tasks[0].result[0].items[0].keyword_info.search_volume_trend.yearly }}",
+              "type": "number"
+            },
+            {
+              "id": "6ae18027-0bb6-42ab-9d8c-6ebc1d60248b",
+              "name": "intent",
+              "value": "={{ $json.tasks[0].result[0].items[0].search_intent_info.main_intent }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        864
+      ],
+      "id": "e5f4649e-77d2-4cb5-b789-6f4eb33f98d5",
+      "name": "Get keyword data"
+    },
+    {
+      "parameters": {
+        "content": "### Connect your DataForSEO API in all HTTP request nodes 🌐",
+        "height": 80,
+        "width": 278,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        1056
+      ],
+      "id": "0762aed4-20d5-4cc0-97fa-a8b405bc1def",
+      "name": "Sticky Note68"
+    },
+    {
+      "parameters": {
+        "content": "### **`Get Page Ranked Keywords`** node:\n* Data Table: `Page Ranked Keywords`\n* Function: `Get`\n* Must Match: `All Conditions`\n* session_id: `your_session_id`\n* Return All",
+        "width": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1856
+      ],
+      "id": "8b4f17cc-64ed-4572-a817-6d9ec1fce350",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Screenshot%202025-11-06%20230221.png)",
+        "width": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1696
+      ],
+      "id": "5705526e-437a-40bc-9f5f-e8ad4cac316e",
+      "name": "Sticky Note33"
+    },
+    {
+      "parameters": {
+        "content": "Return back after you complete Part 2 - Analyze Business, you will need to get the  Page Ranked Keywords Data Table from there",
+        "height": 80,
+        "width": 608,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        1936
+      ],
+      "id": "1d042548-ad82-4ec0-baf0-c2c06228f246",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Rankenstein%20v9.png)",
+        "height": 304,
+        "width": 544,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        464
+      ],
+      "id": "78d5b4e3-b96f-4c16-90e0-f3fa5f6aa3b1",
+      "name": "Sticky Note38"
+    },
+    {
+      "parameters": {
+        "content": "**Workflow created by [@AgriciDaniel](https://www.youtube.com/@AgriciDaniel)**\n* [AI Marketing Hub](https://www.skool.com/ai-marketing-hub)\n* [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro)",
+        "height": 96,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        1040
+      ],
+      "id": "901408d6-1b85-4460-a72b-eaecba466f5a",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/ai%20marketing%20hub.png)",
+        "height": 176,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        880
+      ],
+      "id": "0cfd1102-19be-406e-b2c8-8a69d3d3f714",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "function": "related_keywords",
+          "keyword": "sfaturi dermatolog",
+          "url": null,
+          "location_code": "2642",
+          "language_code": "ro"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "SERP Google",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Suggested Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Keyword Overview",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Mode",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Page Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ranked Keywords": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Prepare Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SERP Google": {
+      "main": [
+        [
+          {
+            "node": "Prepare SERP output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare SERP output": {
+      "main": [
+        [
+          {
+            "node": "Sort Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Mode": {
+      "main": [
+        [
+          {
+            "node": "Prepare AI Mode Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Page Ranked Keywords": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Aggregate3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Suggested Keywords": {
+      "main": [
+        [
+          {
+            "node": "Split3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split3": {
+      "main": [
+        [
+          {
+            "node": "Prepare suggested Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arrange2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keyword Overview": {
+      "main": [
+        [
+          {
+            "node": "Get keyword data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare suggested Keywords": {
+      "main": [
+        [
+          {
+            "node": "Arrange2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3a98970c-4c04-47f4-9447-70e4c7324e15",
+  "meta": {
+    "instanceId": "1ee7b11b3a4bb285563e32fdddf3fbac26379ada529b942ee7cda230735046a1"
+  },
+  "id": "yDmk0mHvY4VD8NMa",
+  "tags": []
+}

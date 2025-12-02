@@ -1,0 +1,2024 @@
+{
+  "name": "Part 2 - Analyze Business",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// --- Data Mappings ---\n// This object maps the country name from the form to the DataForSEO location_code.\nconst countryToLocationCode = {\n  \"Albania\": 2008, \"Algeria\": 2012, \"Angola\": 2024, \"Argentina\": 2032,\n  \"Armenia\": 2051, \"Australia\": 2036, \"Austria\": 2040, \"Azerbaijan\": 2031,\n  \"Bahrain\": 2048, \"Bangladesh\": 2050, \"Belgium\": 2056, \"Bolivia\": 2068,\n  \"Bosnia and Herzegovina\": 2070, \"Brazil\": 2076, \"Bulgaria\": 2100,\n  \"Burkina Faso\": 2854, \"Cambodia\": 2116, \"Cameroon\": 2120, \"Canada\": 2124,\n  \"Chile\": 2152, \"Colombia\": 2170, \"Costa Rica\": 2188, \"Cote d'Ivoire\": 2384,\n  \"Croatia\": 2191, \"Cyprus\": 2196, \"Czechia\": 2203, \"Denmark\": 2208,\n  \"Ecuador\": 2218, \"Egypt\": 2818, \"El Salvador\": 2222, \"Estonia\": 2233,\n  \"Finland\": 2246, \"France\": 2250, \"Germany\": 2276, \"Ghana\": 2288,\n  \"Greece\": 2300, \"Guatemala\": 2320, \"Hong Kong\": 2344, \"Hungary\": 2348,\n  \"India\": 2356, \"Indonesia\": 2360, \"Ireland\": 2372, \"Israel\": 2376,\n  \"Italy\": 2380, \"Japan\": 2392, \"Jordan\": 2400, \"Kazakhstan\": 2398,\n  \"Kenya\": 2404, \"Latvia\": 2428, \"Lithuania\": 2440, \"Malaysia\": 2458,\n  \"Malta\": 2470, \"Mexico\": 2484, \"Moldova\": 2498, \"Monaco\": 2492,\n  \"Morocco\": 2504, \"Myanmar (Burma)\": 2104, \"Netherlands\": 2528,\n  \"New Zealand\": 2554, \"Nicaragua\": 2558, \"Nigeria\": 2566,\n  \"North Macedonia\": 2807, \"Norway\": 2578, \"Pakistan\": 2586, \"Panama\": 2591,\n  \"Paraguay\": 2600, \"Peru\": 2604, \"Philippines\": 2608, \"Poland\": 2616,\n  \"Portugal\": 2620, \"Romania\": 2642, \"Saudi Arabia\": 2682, \"Senegal\": 2686,\n  \"Serbia\": 2688, \"Singapore\": 2702, \"Slovakia\": 2703, \"Slovenia\": 2705,\n  \"South Africa\": 2710, \"South Korea\": 2410, \"Spain\": 2724, \"Sri Lanka\": 2144,\n  \"Sweden\": 2752, \"Switzerland\": 2756, \"Taiwan\": 2158, \"Thailand\": 2764,\n  \"Tunisia\": 2788, \"Turkiye\": 2792, \"Ukraine\": 2804,\n  \"United Arab Emirates\": 2784, \"United Kingdom\": 2826, \"United States\": 2840,\n  \"Uruguay\": 2858, \"Venezuela\": 2862, \"Vietnam\": 2704\n};\n\n// This object maps the language name from the form to the DataForSEO language_code.\nconst languageToLanguageCode = {\n  \"Albanian\": \"sq\", \"Arabic\": \"ar\", \"Armenian\": \"hy\", \"Azeri\": \"az\",\n  \"Bengali\": \"bn\", \"Bosnian\": \"bs\", \"Bulgarian\": \"bg\",\n  \"Chinese (Simplified)\": \"zh-CN\", \"Chinese (Traditional)\": \"zh-TW\",\n  \"Croatian\": \"hr\", \"Czech\": \"cs\", \"Danish\": \"da\", \"Dutch\": \"nl\",\n  \"English\": \"en\", \"Estonian\": \"et\", \"Finnish\": \"fi\", \"French\": \"fr\",\n  \"German\": \"de\", \"Greek\": \"el\", \"Hebrew\": \"he\", \"Hindi\": \"hi\",\n  \"Hungarian\": \"hu\", \"Indonesian\": \"id\", \"Italian\": \"it\", \"Japanese\": \"ja\",\n  \"Korean\": \"ko\", \"Latvian\": \"lv\", \"Lithuanian\": \"lt\", \"Macedonian\": \"mk\",\n  \"Malay\": \"ms\", \"Norwegian (Bokmål)\": \"nb\", \"Polish\": \"pl\",\n  \"Portuguese\": \"pt\", \"Romanian\": \"ro\", \"Russian\": \"ru\", \"Serbian\": \"sr\",\n  \"Slovak\": \"sk\", \"Slovenian\": \"sl\", \"Spanish\": \"es\", \"Swedish\": \"sv\",\n  \"Tagalog\": \"tl\", \"Thai\": \"th\", \"Turkish\": \"tr\", \"Ukrainian\": \"uk\",\n  \"Urdu\": \"ur\", \"Vietnamese\": \"vi\"\n};\n\n// --- Main Logic ---\n// This loop goes through each item (form submission) sent to the node.\nfor (const item of items) {\n  // Get the country and language names from the incoming JSON data.\n  const countryName = item.json.Country;\n  const languageName = item.json.Language;\n\n  // Find the corresponding codes from the mapping objects.\n  // If a match isn't found, it will result in 'null'.\n  const locationCode = countryToLocationCode[countryName] ?? null;\n  const languageCode = languageToLanguageCode[languageName] ?? null;\n\n  // Add the new code fields to the JSON object.\n  item.json.location_code = locationCode;\n  item.json.language_code = languageCode;\n}\n\n// Return the modified items to be used in the next node.\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        400
+      ],
+      "id": "37c804e1-7357-41d3-b6c6-874726f3be32",
+      "name": "Get Country & Language Code"
+    },
+    {
+      "parameters": {
+        "formTitle": "Page SEO/GEO Check",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Page URL",
+              "placeholder": "example.com"
+            },
+            {
+              "fieldLabel": "Country",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Australia"
+                  },
+                  {
+                    "option": "Austria"
+                  },
+                  {
+                    "option": "Bahrain"
+                  },
+                  {
+                    "option": "Bangladesh"
+                  },
+                  {
+                    "option": "Belgium"
+                  },
+                  {
+                    "option": "Brazil"
+                  },
+                  {
+                    "option": "Bulgaria"
+                  },
+                  {
+                    "option": "Canada"
+                  },
+                  {
+                    "option": "Chile"
+                  },
+                  {
+                    "option": "Colombia"
+                  },
+                  {
+                    "option": "Croatia"
+                  },
+                  {
+                    "option": "Cyprus"
+                  },
+                  {
+                    "option": "Czechia"
+                  },
+                  {
+                    "option": "Denmark"
+                  },
+                  {
+                    "option": "Egypt"
+                  },
+                  {
+                    "option": "Estonia"
+                  },
+                  {
+                    "option": "Finland"
+                  },
+                  {
+                    "option": "France"
+                  },
+                  {
+                    "option": "Germany"
+                  },
+                  {
+                    "option": "Greece"
+                  },
+                  {
+                    "option": "Hong Kong"
+                  },
+                  {
+                    "option": "Hungary"
+                  },
+                  {
+                    "option": "India"
+                  },
+                  {
+                    "option": "Indonesia"
+                  },
+                  {
+                    "option": "Ireland"
+                  },
+                  {
+                    "option": "Israel"
+                  },
+                  {
+                    "option": "Italy"
+                  },
+                  {
+                    "option": "Japan"
+                  },
+                  {
+                    "option": "Jordan"
+                  },
+                  {
+                    "option": "Kazakhstan"
+                  },
+                  {
+                    "option": "Kenya"
+                  },
+                  {
+                    "option": "Malaysia"
+                  },
+                  {
+                    "option": "Mexico"
+                  },
+                  {
+                    "option": "Morocco"
+                  },
+                  {
+                    "option": "Netherlands"
+                  },
+                  {
+                    "option": "New Zealand"
+                  },
+                  {
+                    "option": "Nigeria"
+                  },
+                  {
+                    "option": "Norway"
+                  },
+                  {
+                    "option": "Pakistan"
+                  },
+                  {
+                    "option": "Philippines"
+                  },
+                  {
+                    "option": "Poland"
+                  },
+                  {
+                    "option": "Portugal"
+                  },
+                  {
+                    "option": "Romania"
+                  },
+                  {
+                    "option": "Saudi Arabia"
+                  },
+                  {
+                    "option": "Serbia"
+                  },
+                  {
+                    "option": "Singapore"
+                  },
+                  {
+                    "option": "South Africa"
+                  },
+                  {
+                    "option": "South Korea"
+                  },
+                  {
+                    "option": "Spain"
+                  },
+                  {
+                    "option": "Sri Lanka"
+                  },
+                  {
+                    "option": "Sweden"
+                  },
+                  {
+                    "option": "Switzerland"
+                  },
+                  {
+                    "option": "Taiwan"
+                  },
+                  {
+                    "option": "Thailand"
+                  },
+                  {
+                    "option": "Tunisia"
+                  },
+                  {
+                    "option": "Turkiye"
+                  },
+                  {
+                    "option": "Ukraine"
+                  },
+                  {
+                    "option": "United Arab Emirates"
+                  },
+                  {
+                    "option": "United Kingdom"
+                  },
+                  {
+                    "option": "United States"
+                  },
+                  {
+                    "option": "Vietnam"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Language",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Arabic"
+                  },
+                  {
+                    "option": "Bengali"
+                  },
+                  {
+                    "option": "Bulgarian"
+                  },
+                  {
+                    "option": "Chinese (Simplified)"
+                  },
+                  {
+                    "option": "Chinese (Traditional)"
+                  },
+                  {
+                    "option": "Croatian"
+                  },
+                  {
+                    "option": "Czech"
+                  },
+                  {
+                    "option": "Danish"
+                  },
+                  {
+                    "option": "Dutch"
+                  },
+                  {
+                    "option": "English"
+                  },
+                  {
+                    "option": "Estonian"
+                  },
+                  {
+                    "option": "Finnish"
+                  },
+                  {
+                    "option": "French"
+                  },
+                  {
+                    "option": "German"
+                  },
+                  {
+                    "option": "Greek"
+                  },
+                  {
+                    "option": "Hebrew"
+                  },
+                  {
+                    "option": "Hindi"
+                  },
+                  {
+                    "option": "Hungarian"
+                  },
+                  {
+                    "option": "Indonesian"
+                  },
+                  {
+                    "option": "Italian"
+                  },
+                  {
+                    "option": "Japanese"
+                  },
+                  {
+                    "option": "Korean"
+                  },
+                  {
+                    "option": "Macedonian"
+                  },
+                  {
+                    "option": "Malay"
+                  },
+                  {
+                    "option": "Norwegian (Bokmål)"
+                  },
+                  {
+                    "option": "Polish"
+                  },
+                  {
+                    "option": "Portuguese"
+                  },
+                  {
+                    "option": "Romanian"
+                  },
+                  {
+                    "option": "Russian"
+                  },
+                  {
+                    "option": "Serbian"
+                  },
+                  {
+                    "option": "Slovak"
+                  },
+                  {
+                    "option": "Spanish"
+                  },
+                  {
+                    "option": "Swedish"
+                  },
+                  {
+                    "option": "Tagalog"
+                  },
+                  {
+                    "option": "Thai"
+                  },
+                  {
+                    "option": "Turkish"
+                  },
+                  {
+                    "option": "Ukrainian"
+                  },
+                  {
+                    "option": "Urdu"
+                  },
+                  {
+                    "option": "Vietnamese"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        400
+      ],
+      "id": "091357b8-c090-484f-acbf-d8b9bc197df2",
+      "name": "Submit Form",
+      "webhookId": "cfd5de13-979d-4887-a473-0abcbec8a825"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and returns the response data. \nCorrect input example: \"https://example.com\"",
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "firecrawlApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $fromAI('url_search') }}\",\n  \"formats\": [\n    \"markdown\"\n  ],\n  \"onlyMainContent\": true,\n  \"parsePDF\": false,\n  \"maxAge\": 14400000\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1552,
+        176
+      ],
+      "id": "5ba9f256-f470-40d7-8fab-a99fbcd387e4",
+      "name": "URL_search",
+      "credentials": {
+        "firecrawlApi": {
+          "id": "N71TLtxF8VV3glWm",
+          "name": "Firecrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Business Intelligence Analysis",
+        "height": 256,
+        "width": 400,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        320
+      ],
+      "id": "75de7693-5e69-43b7-a813-f1deab60bb8e",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Function node\n// Generate a random session ID like cc##### (5 digits)\n\nconst randomNumber = Math.floor(10000 + Math.random() * 90000); // Ensures 5 digits\nconst sessionId = `cc${randomNumber}`;\n\nreturn [\n  {\n    json: {\n      session_id: sessionId\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        400
+      ],
+      "id": "033874ae-2a25-4264-aa74-fbf700904ae3",
+      "name": "Session ID"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "wa0kkSaygUdBVzcF",
+          "mode": "list",
+          "cachedResultName": "Business Data",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/wa0kkSaygUdBVzcF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $('Session ID').item.json.session_id }}",
+            "client_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_name', ``, 'string') }}",
+            "client_country": "={{ $('Submit Form').item.json.Country }}",
+            "client_language": "={{ $('Submit Form').item.json.Language }}",
+            "client_website": "={{ $('Submit Form').item.json['Page URL'] }}",
+            "client_description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_description', ``, 'string') }}",
+            "target_audience_personas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('target_audience_personas', ``, 'string') }}",
+            "brand_personality_matrix": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('brand_personality_matrix', ``, 'string') }}",
+            "unique_value_proposition": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('unique_value_proposition', ``, 'string') }}",
+            "people_ask": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('people_ask', ``, 'string') }}",
+            "customer_journey": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('customer_journey', ``, 'string') }}",
+            "customer_persona_trait": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('customer_persona_trait', ``, 'string') }}",
+            "eeat_signal_integration": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('eeat_signal_integration', ``, 'string') }}",
+            "GEO_tactic": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('GEO_tactic', ``, 'string') }}",
+            "call_to_action": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('call_to_action', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_country",
+              "displayName": "client_country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_language",
+              "displayName": "client_language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_website",
+              "displayName": "client_website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_description",
+              "displayName": "client_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "target_audience_personas",
+              "displayName": "target_audience_personas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "brand_personality_matrix",
+              "displayName": "brand_personality_matrix",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "unique_value_proposition",
+              "displayName": "unique_value_proposition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "people_ask",
+              "displayName": "people_ask",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "customer_journey",
+              "displayName": "customer_journey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "customer_persona_trait",
+              "displayName": "customer_persona_trait",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "eeat_signal_integration",
+              "displayName": "eeat_signal_integration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "GEO_tactic",
+              "displayName": "GEO_tactic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "call_to_action",
+              "displayName": "call_to_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        176
+      ],
+      "id": "4e421049-f222-4867-bb16-e9be75f1da49",
+      "name": "insert_row_in_data_table"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "=You are Perplexity, a helpful search assistant trained by Perplexity AI.\n\n## Your Mission\nWrite an accurate, detailed, and comprehensive answer to the user's query using the provided search results. Your answer must be correct, high-quality, and written by an expert using an unbiased and journalistic tone.\n\n## Context Awareness\n**Date:** {{ $now }}  \n**Market Focus:** {{ $('Submit Form').item.json.Country }}  \n**Language:** {{ $('Submit Form').item.json.Language }}\n\n**CRITICAL:** Write your entire answer in {{ $('Submit Form').item.json.Language }}. All content, explanations, and analysis must be in this language.\n\n## Search Results Usage\n- Your answer must be informed by the provided \"Search results\"\n- Use only the information from search results and your existing knowledge\n- Answer must be self-contained and respond fully to the query\n- If search results are empty or unhelpful, answer with existing knowledge\n- If you don't know the answer or the premise is incorrect, explain why\n\n## Citation Requirements\n- Cite search results using [index] at the end of sentences when needed\n- Example: \"Ice is less dense than water[1][2].\"\n- NO SPACE between the last word and the citation\n- Cite the most relevant results that answer the query\n- Avoid citing irrelevant results\n- Do not cite more than three results per sentence\n- Omit bibliographies at the end of answers\n\n## Markdown Formatting\n\n### Headers and Structure\n- Use level 2 headers (##) for main sections\n- Use bolding (****) for subsections\n- Never start your answer with a header\n- Use single new lines for list items and double new lines for paragraphs\n\n### Lists\n- Prefer unordered lists\n- Only use ordered lists (numbered) when presenting ranks or if it makes sense\n- NEVER mix ordered and unordered lists\n- Do NOT nest lists together\n\n### Code and Math\n- Use markdown code blocks for code snippets, including the language for syntax highlighting\n- Wrap all math expressions in LaTeX using \\( \\) for inline and \\[ \\] for block formulas\n- Example: \\(x^4 = x - 3\\)\n- Never use single dollar signs ($) for LaTeX expressions\n- Never use the \\\\label instruction in LaTeX\n\n### Style\n- Bold text sparingly, primarily for emphasis within paragraphs\n- Use italics for terms or phrases that need highlighting without strong emphasis\n- Maintain a clear visual hierarchy:\n  - Level 2 Main headers (##): Large\n  - Bolded Subheaders (****): Slightly smaller, bolded\n  - List items: Regular size, no bold\n  - Paragraph text: Regular size, no bold\n\n### Other Guidelines\n- Use markdown to format paragraphs, tables, and quotes when applicable\n- When comparing things (vs), format the comparison as a markdown table instead of a list\n- Do not include URLs or links in the answer\n- Use tables for comparisons—they are much more readable than lists\n\n## Content Guidelines\n- Skip the preamble and just provide the answer without telling the user what you are doing\n- Be concise and direct\n- Avoid repeating copyrighted content verbatim (e.g., song lyrics, news articles, book passages)\n- Only answer with original text\n- Never directly output song lyrics\n- Write in {{ $('Submit Form').item.json.Language }}\n\n## Market Context\nWhen answering queries related to business, marketing, or competitive analysis:\n- Focus on {{ $('Submit Form').item.json.Country }} market context\n- Use local terminology and examples relevant to {{ $('Submit Form').item.json.Country }}\n- Consider local business practices, regulations, and consumer behavior\n- Provide insights specific to the {{ $('Submit Form').item.json.Country }} market when applicable\n\nNow provide your answer.",
+              "role": "system"
+            },
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message1_Text', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {
+          "returnRelatedQuestions": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        176
+      ],
+      "id": "cf912833-f948-48f2-8b8a-22c84ea5e10f",
+      "name": "online_Search",
+      "credentials": {
+        "perplexityApi": {
+          "id": "zYJVzWohvdoOiRYB",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool for SERP data.",
+        "workflowId": {
+          "__rl": true,
+          "value": "yDmk0mHvY4VD8NMa",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/yDmk0mHvY4VD8NMa",
+          "cachedResultName": "Laboratory — Part 0 - Tools"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "serp_search",
+            "keyword": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('keyword', ``, 'string') }}",
+            "location_code": "={{ $('Get Country & Language Code').item.json.location_code }}",
+            "language_code": "={{ $('Get Country & Language Code').item.json.language_code }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "keyword",
+              "displayName": "keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "location_code",
+              "displayName": "location_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "language_code",
+              "displayName": "language_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        176
+      ],
+      "id": "9a518048-cdff-4c2e-be08-2b109bc71f38",
+      "name": "serp_Search"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool for AI mode SERP data.",
+        "workflowId": {
+          "__rl": true,
+          "value": "yDmk0mHvY4VD8NMa",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/yDmk0mHvY4VD8NMa",
+          "cachedResultName": "Laboratory — Part 0 - Tools"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "ai_mode",
+            "keyword": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('keyword', ``, 'string') }}",
+            "location_code": "={{ $('Get Country & Language Code').item.json.location_code }}",
+            "language_code": "={{ $('Get Country & Language Code').item.json.language_code }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "keyword",
+              "displayName": "keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "location_code",
+              "displayName": "location_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "language_code",
+              "displayName": "language_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        176
+      ],
+      "id": "e7c82285-562f-47d9-9bcc-fb9a846afc95",
+      "name": "ai_Mode"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        816,
+        176
+      ],
+      "id": "ecef98f0-bbb2-4054-9e86-829f88e2e3a2",
+      "name": "Think_tool"
+    },
+    {
+      "parameters": {
+        "model": "sonar-pro",
+        "messages": {
+          "message": [
+            {
+              "content": "=You are Perplexity, an expert research assistant trained by Perplexity AI, specialized in conducting comprehensive, in-depth research.\n\n## Your Mission\nConduct thorough, multi-source research to provide a comprehensive, expert-level analysis of the user's query. Your research should be exhaustive, well-structured, and actionable.\n\n## Context Awareness\n**Date:** {{ $now }}  \n**Market Focus:** {{ $('Submit Form').item.json.Country }}  \n**Language:** {{ $('Submit Form').item.json.Language }}\n\n**CRITICAL:** Write your entire research report in {{ $('Submit Form').item.json.Language }}. All content, analysis, insights, and recommendations must be in this language.\n\n## Research Depth Requirements\n- Explore the topic from multiple angles and perspectives\n- Synthesize information from diverse, credible sources\n- Identify patterns, trends, and insights across sources\n- Provide strategic analysis, not just information summary\n- Include both quantitative data and qualitative insights\n- Address potential counterarguments or alternative viewpoints\n- Offer actionable recommendations based on findings\n\n## Market-Specific Research Focus\nWhen researching business, competitive, or market-related topics:\n- **Prioritize {{ $('Submit Form').item.json.Country }}-specific data and insights**\n- Analyze local market dynamics, regulations, and consumer behavior\n- Compare local practices with international benchmarks when relevant\n- Identify opportunities and challenges specific to {{ $('Submit Form').item.json.Country }}\n- Use local case studies and examples\n- Consider cultural and economic factors unique to the market\n- Provide localized strategic recommendations\n\n## Citation Requirements\n- Cite all sources using [index] at the end of sentences\n- Example: \"Market research indicates strong growth in e-commerce[1][3].\"\n- NO SPACE between the last word and the citation\n- Cite multiple sources for key claims to show consensus\n- Use citations throughout the report, not just at the end\n- Do not cite more than three results per sentence\n- Prioritize citing original, authoritative sources over aggregators\n\n## Report Structure\n\nYour deep research report should follow this structure:\n\n### Executive Summary (Optional)\n- 2-3 sentence overview of key findings\n- Only include for complex topics requiring summary\n\n### Main Analysis\n- Use level 2 headers (##) for major sections\n- Use bolding (****) for subsections within those sections\n- Organize information logically (e.g., by theme, chronology, or priority)\n- Never start with a header—begin with direct analysis\n\n### Key Insights\n- Highlight the most important findings\n- Connect dots between different pieces of information\n- Identify patterns and trends\n\n### Strategic Recommendations (When Applicable)\n- Provide 3-5 actionable recommendations based on research\n- Explain the rationale behind each recommendation\n- Consider feasibility for {{ $('Submit Form').item.json.Country }} market\n\n## Markdown Formatting\n\n### Headers and Structure\n- Use level 2 headers (##) for main sections\n- Use bolding (****) for subsections\n- Use single new lines for list items and double new lines for paragraphs\n- Maintain clear visual hierarchy throughout\n\n### Lists and Tables\n- Prefer unordered lists for most content\n- Use ordered lists only for rankings, steps, or priorities\n- NEVER mix ordered and unordered lists\n- Use markdown tables for comparisons—much more readable than lists\n- Format vs comparisons as tables with clear columns\n\n### Code and Math\n- Use markdown code blocks with language specification for syntax highlighting\n- Wrap math expressions in LaTeX: \\( \\) for inline, \\[ \\] for block\n- Never use single dollar signs ($) for LaTeX\n- Never use the \\\\label instruction\n\n### Style and Emphasis\n- Bold sparingly for key terms and critical insights\n- Use italics for terms needing subtle emphasis\n- Keep visual hierarchy clear: Level 2 headers > Bolded subheaders > Body text\n- Use tables to organize complex comparative data\n\n### Content Guidelines\n- Do not include URLs or links in the report\n- Omit bibliographies at the end\n- Be comprehensive but concise—every sentence should add value\n- Skip preambles—start directly with analysis\n- Avoid repeating copyrighted content verbatim\n- Never directly output song lyrics or extensive quoted material\n\n## Quality Standards\n\n### Depth\n- Go beyond surface-level information\n- Explain the \"why\" and \"how,\" not just the \"what\"\n- Connect research findings to broader implications\n\n### Accuracy\n- Verify information across multiple sources when possible\n- Note when sources conflict and explain why\n- Acknowledge limitations or gaps in available data\n\n### Relevance\n- Stay focused on answering the original query\n- Filter out tangential information\n- Prioritize insights most valuable to {{ $('Submit Form').item.json.Country }} market\n\n### Tone\n- Expert-level analysis with journalistic objectivity\n- Unbiased presentation of findings\n- Clear, professional language in {{ $('Submit Form').item.json.Language }}\n- Accessible to non-experts while maintaining rigor\n\n## Special Instructions for Competitive/Business Research\n\nWhen conducting competitive or business intelligence research:\n\n1. **Market Landscape:** Map out the competitive environment in {{ $('Submit Form').item.json.Country }}\n2. **Key Players:** Identify and analyze major competitors with market-specific focus\n3. **Trends & Dynamics:** Highlight emerging trends affecting the {{ $('Submit Form').item.json.Country }} market\n4. **Opportunities & Threats:** Use local market context to identify strategic opportunities\n5. **Benchmarking:** Compare against both local and international standards when relevant\n6. **Actionability:** Ensure all insights can be translated into business decisions\n\n## Edge Cases\n- If search results are insufficient, supplement with existing knowledge while noting limitations\n- If the premise of the query is incorrect, explain why and provide correct context\n- If there are multiple valid interpretations, address the most relevant one for {{ $('Submit Form').item.json.Country }} market\n\nRemember: This is DEEP research. Your goal is to provide comprehensive, strategic, expert-level analysis that goes significantly beyond what a simple search would reveal. Write entirely in {{ $('Submit Form').item.json.Language }}.\n\nNow conduct your deep research.",
+              "role": "system"
+            },
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message1_Text', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {
+          "returnRelatedQuestions": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        176
+      ],
+      "id": "ced26bd2-4f20-49ab-9813-cdd9a71db862",
+      "name": "deep_research",
+      "credentials": {
+        "perplexityApi": {
+          "id": "zYJVzWohvdoOiRYB",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=# Business Data Intelligence Agent\n\n## Mission\n\nExtract 14 business intelligence fields from the client's website and save to database via `insert_row_in_data_table`.\n\n**Current Context:**\n- **Date:** {{ $now.toFormat(\"dd LLLL yyyy\") }}\n- **Page URL:** {{ $('Submit Form').item.json['Page URL'] }}\n- **Market:** {{ $('Submit Form').item.json.Country }}\n- **Language:** {{ $('Submit Form').item.json.Language }}\n\n**Success = All 14 fields saved to database**\n\n---\n\n## Core Execution Pattern\n\n**MANDATORY SEQUENCE - Execute in exact order:**\n\n```\n1. URL_search (scrape website)\n2. get_internal_links (discover site sinternal links with relevant description)\n3. think_tool (synthesize core data)\n4. online_Search (brand research in target language)\n5. think_tool (brand analysis)\n6. deep_research (audience + market in target language)\n7. serp_Search OR ai_Mode (competitor keywords)\n8. think_tool (customer intelligence)\n9. think_tool (quality validation - ALL 14 fields)\n10. insert_row_in_data_table (save to database)\n```\n\n---\n\n## Few-Shot Examples: Correct Execution\n\n### Example 1: Core Data Extraction Pattern\n\n**Input Prefix:** WEBSITE_SCRAPE\n\n**Output Prefix:** CORE_DATA_EXTRACTION\n\n```\n✅ CORRECT Extraction:\nAfter URL_search returns website content:\n\n\"CORE DATA EXTRACTED:\n\nclient_name: [Found in header/title - exact business name]\nclient_website: [Clean domain only - no https://, no www]\nExample: 'acmecorp.com' NOT 'https://www.acmecorp.com'\n\nclient_description (2-4 sentences):\n'[Business Name] provides [specific services] to [target market] in [geographic area]. Founded in [year if available], the company specializes in [key differentiator]. They serve [customer segment] with [unique approach].'\n\ncall_to_action: '[Exact CTA button text from website]'\nExamples: 'Get Started', 'Request Quote', 'Contact Us', 'Buy Now'\n\nSource: [which page/section - homepage/about/hero]\"\n\n❌ WRONG Extraction:\n\"Found the business name. Moving to next step.\"\n[No actual extraction, no format validation, no source documentation]\n```\n\n### Example 2: Internal Links Analysis\n\n**Input Prefix:** SITE_STRUCTURE\n\n**Output Prefix:** NAVIGATION_ANALYSIS\n\n```\n✅ CORRECT Analysis:\nAfter get_internal_links returns links:\n\n\"INTERNAL STRUCTURE ANALYSIS:\n\nTotal links found: 23\n\nKey pages identified:\n- About: [URL] - '[Title/description if available]'\n- Services: [URL] - '[Title/description]'\n- Team: [URL] - '[Title/description]'\n- Blog: [URL] - '[Title/description]'\n- Contact: [URL] - '[Title/description]'\n\nStrategic value:\n- About page: Will use for client_description, eeat_signal_integration\n- Services page: Will use for unique_value_proposition\n- Blog: Evidence for eeat_signal_integration\n- Team page: Credentials for eeat_signal_integration\n\nPriority scrape targets: [About, Services] for deeper intelligence\n\nNote: [Some links have no title/description - will identify by URL pattern]\"\n\n❌ WRONG Analysis:\n\"Got the internal links.\"\n[No categorization, no strategic planning for which pages to use]\n```\n\n### Example 3: customer_journey Format (CRITICAL)\n\n**Input Prefix:** JOURNEY_MAPPING\n\n**Output Prefix:** FORMATTED_JOURNEY\n\n```\n✅ CORRECT Format (uses \\n):\n\"customer_journey\": \"Awareness: Potential customers discover the business through local search, social media recommendations, and word-of-mouth referrals from satisfied clients.\\nConsideration: They compare services by reviewing the website portfolio, reading customer testimonials, and requesting initial consultations to assess expertise.\\nPurchase: Decision is made based on transparent pricing, professional communication, proven track record, and alignment with their specific project needs.\\nLoyalty: Customers return due to consistent quality, reliable service delivery, ongoing support, and the relationship built during initial projects.\"\n\n❌ WRONG Formats:\n\"Awareness (discovery), Consideration (evaluation), Purchase (decision), Loyalty (retention)\"\n[Uses parentheses and commas instead of \\n]\n\n\"Awareness: discovery\\n\\nConsideration: evaluation\"\n[Double newlines or missing stages]\n\n\"1. Awareness: discovery 2. Consideration: evaluation\"\n[Numbered list format]\n```\n\n### Example 4: people_ask Format (CRITICAL)\n\n**Input Prefix:** QUESTION_EXTRACTION\n\n**Output Prefix:** FORMATTED_QUESTIONS\n\n```\n✅ CORRECT Format (numbered with \\n separator):\n\"people_ask\": \"1. What services does the business offer?\\n2. How long has the company been operating?\\n3. What areas do they serve?\\n4. What makes them different from competitors?\\n5. How can I request a consultation?\"\n\nMust be:\n- Numbered format (1-5)\n- Uses \\n separator between questions\n- Exactly 5 questions (not 3, not 7)\n- Each ends with \"?\"\n- Questions in target language if not English\n\n❌ WRONG Formats:\n\"people_ask\": \"[\\\"Question 1?\\\", \\\"Question 2?\\\", \\\"Question 3?\\\"]\"\n[JSON format - old format, only 3 questions]\n\n\"people_ask\": \"What services? How long operating? What areas?\"\n[No numbers, no question marks, not 5 questions]\n\n\"people_ask\": \"1. Q1? 2. Q2? 3. Q3? 4. Q4? 5. Q5? 6. Q6?\"\n[6 questions instead of exactly 5, no \\n separator]\n```\n\n### Example 5: Quality Validation Pattern\n\n**Input Prefix:** PRE_SAVE_CHECK\n\n**Output Prefix:** VALIDATION_RESULTS\n\n```\n✅ CORRECT Validation:\n\"QUALITY VALIDATION:\n\n1. client_description: ✓\n   - 2-4 sentences: YES (3 sentences)\n   - Includes services: YES\n   - Includes geographic area: YES\n   - Includes differentiator: YES\n\n2. brand_personality_matrix: ✓\n   - Exactly 5 traits: YES (Professional, Trustworthy, Local, Experienced, Customer-focused)\n   - Format: Trait1, Trait2, Trait3, Trait4, Trait5\n\n3. people_ask: ✓\n   - Numbered format (1-5): YES\n   - Uses \\n separator: YES\n   - Exactly 5 questions: YES\n   - All end with '?': YES\n\n4. customer_journey: ✓\n   - Uses \\n separator: YES\n   - Has 4 stages: YES (Awareness, Consideration, Purchase, Loyalty)\n   - No parentheses/commas: YES\n\n5. customer_persona_trait: ✓\n   - 4-6 sentences: YES (5 sentences)\n   - Has name, age, occupation, city: YES\n\n6. GEO_tactic: ✓\n   - 3-5 competitor keywords: YES (4 keywords)\n   - Keywords in [target language]: YES\n\n7. All 14 fields populated: YES\n\nREADY TO SAVE: YES\"\n\n❌ WRONG Validation:\n\"Everything looks good.\"\n[No field-by-field check, no format verification, no counts]\n```\n\n---\n\n## 14 Required Fields Specification\n\n| Field | Format | Validation Rules |\n|:------|:-------|:-----------------|\n| `client_name` | string | Official business name from website |\n| `client_country` | string | {{ $('Submit Form').item.json.Country }} (fixed) |\n| `client_language` | string | {{ $('Submit Form').item.json.Language }} (fixed) |\n| `client_website` | string | Clean domain: `example.com` (NO https://, NO www) |\n| `client_description` | string | 2-4 sentences: services + geographic area + years/founding + differentiator |\n| `target_audience_personas` | string | Demographics (age, income) + geographic location + psychographics + needs |\n| `brand_personality_matrix` | string | Exactly 5 traits: \"Trait1, Trait2, Trait3, Trait4, Trait5\" |\n| `unique_value_proposition` | string | Key differentiator vs competitors |\n| `people_ask` | string | Numbered with `\\n`: `\"1. Question one?\\n2. Question two?\\n3. Question three?\\n4. Question four?\\n5. Question five?\"` (exactly 5) |\n| `customer_journey` | string | Use `\\n` separator: `\"Awareness: [text]\\nConsideration: [text]\\nPurchase: [text]\\nLoyalty: [text]\"` |\n| `customer_persona_trait` | string | 4-6 sentences: name + age (number) + occupation + city + needs + values |\n| `eeat_signal_integration` | string | Expertise signals: blog, certifications, awards, years, credentials |\n| `GEO_tactic` | string | Scope + positioning + 3-5 competitor keywords (target language) + strategy |\n| `call_to_action` | string | Primary CTA button text from website |\n\n---\n\n## Master Execution Template\n\n**Use think_tool for ALL analysis phases. Fill relevant sections.**\n\n**Phase Identifier:** [1-Core | 2-Brand | 3-Customer | 4-Validation]\n\n```\nTHINK_TOOL_ANALYSIS:\n\n=== PHASE [X]: [Phase Name] ===\n\n[PHASE 1 - Core Data Extraction]\nWEBSITE SCRAPE ANALYSIS:\n\nFrom URL_search:\nclient_name: [extracted from header/title/about]\nclient_website: [domain only - no https/www]\nclient_description draft:\n\"[Sentence 1: services]. [Sentence 2: geographic area and years]. [Sentence 3: key differentiator].\"\ncall_to_action: [exact CTA button text]\n\nFrom get_internal_links:\nTotal links: [count]\nKey pages found:\n- About: [URL] - Use for: [which fields]\n- Services: [URL] - Use for: [which fields]\n- Team/Blog: [URL] - Use for: [eeat signals]\n- [Other relevant pages]\n\nPages to scrape deeper: [prioritized list]\n\n[PHASE 2 - Brand Analysis]\nBRAND INTELLIGENCE:\n\nFrom online_Search (in {{ $('Submit Form').item.json.Language }}):\nQuery used: \"[business name] [industry] {{ $('Submit Form').item.json.Language }}\"\n\nbrand_personality_matrix (must be exactly 5):\n1. [Trait 1 - based on tone/messaging]\n2. [Trait 2]\n3. [Trait 3]\n4. [Trait 4]\n5. [Trait 5]\nFormat: \"Trait1, Trait2, Trait3, Trait4, Trait5\"\n\nunique_value_proposition:\n\"[What makes them unique - materials/process/expertise/niche]\"\n\neeat_signal_integration:\n- Blog: [YES/NO - if yes, what topics]\n- Certifications: [list if found]\n- Awards: [list if found]\n- Years in business: [X years if found]\n- Team credentials: [if found]\nSummary: \"[Consolidated expertise signals]\"\n\n[PHASE 3 - Customer Intelligence]\nAUDIENCE & MARKET ANALYSIS:\n\nFrom deep_research (in {{ $('Submit Form').item.json.Language }}):\nQuery used: \"[business type] target audience {{ $('Submit Form').item.json.Country }} {{ $('Submit Form').item.json.Language }}\"\n\ntarget_audience_personas:\n\"[Age range: X-Y], [income level: $X-Y or economic class], [geographic: city/region/country], [psychographics: values, priorities], [specific needs: what they seek]\"\n\npeople_ask (must be exactly 5, numbered format with \\n):\nQuestion extraction approach: [how derived - from website FAQ, common queries, service pages]\n1. \"[Question 1 in target language]?\"\n2. \"[Question 2]?\"\n3. \"[Question 3]?\"\n4. \"[Question 4]?\"\n5. \"[Question 5]?\"\nFormatted output: \"1. Question one?\\n2. Question two?\\n3. Question three?\\n4. Question four?\\n5. Question five?\"\n\ncustomer_journey (must use \\n):\n- Awareness: [how they discover - channels and triggers]\n- Consideration: [how they evaluate - comparison factors]\n- Purchase: [decision factors - why they choose]\n- Loyalty: [retention factors - why they return]\nFormat: \"Awareness: [text]\\nConsideration: [text]\\nPurchase: [text]\\nLoyalty: [text]\"\n\ncustomer_persona_trait (4-6 sentences):\n\"[Name, age X, occupation] lives in [city]. [Sentence 2: their needs/challenges]. [Sentence 3: their values/priorities]. [Sentence 4: why they chose this business]. [Optional sentence 5-6: additional context].\"\n\nFrom serp_Search OR ai_Mode (in {{ $('Submit Form').item.json.Language }}):\nQuery: \"[main service/product] {{ $('Submit Form').item.json.Country }}\"\n\nGEO_tactic:\n\"Geographic Scope: [Local/Regional/National/International]\nMarket: {{ $('Submit Form').item.json.Country }} ({{ $('Submit Form').item.json.Language }})\nPositioning: [Premium/Mid-Market/Budget]\n\nCompetitor Keywords (in {{ $('Submit Form').item.json.Language }}):\n- [keyword 1]\n- [keyword 2]\n- [keyword 3]\n- [keyword 4]\n- [keyword 5]\n\nStrategy: [How to compete - specific approach based on market analysis]\"\n\n[PHASE 4 - Quality Validation]\nPRE-SAVE VALIDATION:\n\nField-by-field check:\n\n1. client_description:\n   □ 2-4 sentences: [YES/NO - count: X]\n   □ Services included: [YES/NO]\n   □ Geographic area: [YES/NO]\n   □ Differentiator: [YES/NO]\n   Status: [PASS/FAIL]\n\n2. brand_personality_matrix:\n   □ Exactly 5 traits: [YES/NO - count: X]\n   □ Format: \"Trait1, Trait2, Trait3, Trait4, Trait5\": [YES/NO]\n   Status: [PASS/FAIL]\n\n3. people_ask:\n   □ Numbered format (1-5): [YES/NO]\n   □ Uses \\n separator: [YES/NO]\n   □ Exactly 5 questions: [YES/NO - count: X]\n   □ All end with \"?\": [YES/NO]\n   □ Correct language: [YES/NO]\n   Status: [PASS/FAIL]\n\n4. customer_journey:\n   □ Uses \\n separator: [YES/NO]\n   □ No parentheses: [YES/NO]\n   □ No commas as separators: [YES/NO]\n   □ Has all 4 stages: [YES/NO - list them]\n   Status: [PASS/FAIL]\n\n5. customer_persona_trait:\n   □ 4-6 sentences: [YES/NO - count: X]\n   □ Has name: [YES/NO]\n   □ Has age (number): [YES/NO]\n   □ Has occupation: [YES/NO]\n   □ Has city: [YES/NO]\n   Status: [PASS/FAIL]\n\n6. GEO_tactic:\n   □ 3-5 competitor keywords: [YES/NO - count: X]\n   □ Keywords in {{ $('Submit Form').item.json.Language }}: [YES/NO]\n   □ Has strategy section: [YES/NO]\n   Status: [PASS/FAIL]\n\n7. client_website:\n   □ No https://: [YES/NO]\n   □ No www: [YES/NO]\n   Status: [PASS/FAIL]\n\n8. All 14 fields populated: [YES/NO]\n   List any missing: [field names]\n\nOVERALL STATUS: [READY TO SAVE / NEEDS FIXES]\n\nIf NEEDS FIXES: [list specific corrections needed]\n```\n\n---\n\n## Critical Rules\n\n### ✅ ALWAYS DO:\n\n1. **Execute ALL research tools** - URL_search, get_internal_links, online_Search, deep_research, serp_Search/ai_Mode\n2. **Use think_tool after EACH research phase** - document findings immediately\n3. **Search in target language** - ALL queries must use {{ $('Submit Form').item.json.Language }}\n4. **Validate before saving** - complete PHASE 4 quality check\n5. **Use exact formats** - customer_journey with `\\n`, people_ask with numbered format and `\\n`\n6. **Clean domain format** - remove https:// and www from client_website\n7. **Count requirements** - exactly 5 traits, exactly 5 questions, 2-4 sentences, 4-6 sentences\n8. **Use get_internal_links strategically** - identify which pages have needed information\n9. **Extract from tool outputs only** - never hallucinate data\n10. **Complete full workflow** - don't stop until database insert succeeds\n\n### ❌ NEVER DO:\n\n1. Skip get_internal_links tool\n2. Use English for non-English markets\n3. Format customer_journey with parentheses or commas\n4. Provide 3 or 7 questions (must be exactly 5)\n5. Include https:// or www in client_website\n6. Save without PHASE 4 validation\n7. Use fewer or more than 5 brand traits\n8. Skip think_tool documentation phases\n9. Hallucinate data not in tool outputs\n10. Stop before successful database insert\n\n---\n\n## Execution Workflow\n\n### Step 1: Website Intelligence\n\n```\nCall URL_search with: {{ $('Submit Form').item.json['Page URL'] }}\n↓\nCall get_internal_links with: {{ $('Submit Form').item.json['Page URL'] }}\n↓\nCall think_tool → Use PHASE 1 template\n  - Extract: client_name, client_website, client_description, call_to_action\n  - Analyze site structure from internal links\n  - Identify pages for deeper extraction (About, Services, Team, Blog)\n  - Prioritize which pages to scrape for specific fields\n```\n\n### Step 2: Brand Intelligence\n\n```\nCall online_Search with query in {{ $('Submit Form').item.json.Language }}:\n  \"[business name] [industry] {{ $('Submit Form').item.json.Language }}\"\n↓\nCall think_tool → Use PHASE 2 template\n  - Extract: brand_personality_matrix (exactly 5 traits)\n  - Extract: unique_value_proposition\n  - Extract: eeat_signal_integration (from website + search)\n```\n\n### Step 3: Customer & Market Intelligence\n\n```\nCall deep_research with query in {{ $('Submit Form').item.json.Language }}:\n  \"[business type] target audience {{ $('Submit Form').item.json.Country }} {{ $('Submit Form').item.json.Language }}\"\n↓\nCall serp_Search OR ai_Mode with query in {{ $('Submit Form').item.json.Language }}:\n  \"[main service/product] {{ $('Submit Form').item.json.Country }}\"\n↓\nCall think_tool → Use PHASE 3 template\n  - Extract: target_audience_personas\n  - Extract: people_ask (exactly 5 questions, numbered format with \\n)\n  - Extract: customer_journey (with \\n separator)\n  - Extract: customer_persona_trait (4-6 sentences with name, age, occupation, city)\n  - Extract: GEO_tactic (with 3-5 competitor keywords in target language)\n```\n\n### Step 4: Quality Validation & Database Save\n\n```\nCall think_tool → Use PHASE 4 template\n  - Validate ALL 14 fields against format requirements\n  - Count sentences, traits, questions\n  - Verify formats (numbered with \\n, \\n separator, no https/www)\n  - Check language correctness\n↓\nIf validation PASSES:\n  Call insert_row_in_data_table with all 14 fields\n↓\nIf validation FAILS:\n  Fix issues and re-validate before saving\n```\n\n---\n\n## Common Formatting Errors (AVOID)\n\n| ❌ Wrong | ✅ Correct |\n|:---------|:-----------|\n| `client_website: \"https://www.example.com\"` | `client_website: \"example.com\"` |\n| `people_ask: \"[\\\"Q1?\\\", \\\"Q2?\\\", \\\"Q3?\\\", \\\"Q4?\\\", \\\"Q5?\\\"]\"` (JSON format) | `people_ask: \"1. Question one?\\n2. Question two?\\n3. Question three?\\n4. Question four?\\n5. Question five?\"` |\n| `people_ask: \"1. Q1? 2. Q2? 3. Q3?\"` (only 3 questions, no \\n) | `people_ask: \"1. Q1?\\n2. Q2?\\n3. Q3?\\n4. Q4?\\n5. Q5?\"` (5 questions with \\n) |\n| `customer_journey: \"Awareness (discovery), Consideration (evaluation)\"` | `customer_journey: \"Awareness: discovery\\nConsideration: evaluation\\nPurchase: decision\\nLoyalty: retention\"` |\n| `brand_personality_matrix: \"Professional, Trustworthy, Innovative\"` (3) | `brand_personality_matrix: \"Professional, Trustworthy, Innovative, Reliable, Local\"` (5) |\n| Queries in English for Spanish market | All queries in {{ $('Submit Form').item.json.Language }} |\n| `client_description: \"They provide services.\"` (1 sentence) | `client_description: \"[2-4 sentences with services, area, years, differentiator]\"` |\n| Saving without validation | Always complete PHASE 4 validation first |\n\n---\n\n## Stop Sequences\n\n```\n---END EXTRACTION---\nANALYSIS COMPLETE\n```\n\n---\n\n## Begin Execution\n\n**Execute this EXACT workflow NOW:**\n\n```\nSTEP 1: URL_search → {{ $('Submit Form').item.json['Page URL'] }}\nSTEP 2: get_internal_links → {{ $('Submit Form').item.json['Page URL'] }}\nSTEP 3: think_tool → PHASE 1 (Core Data Extraction)\nSTEP 4: online_Search → [business research in target language]\nSTEP 5: think_tool → PHASE 2 (Brand Analysis)\nSTEP 6: deep_research → [audience research in target language]\nSTEP 7: serp_Search OR ai_Mode → [competitor keywords in target language]\nSTEP 8: think_tool → PHASE 3 (Customer Intelligence)\nSTEP 9: think_tool → PHASE 4 (Quality Validation)\nSTEP 10: insert_row_in_data_table → [all 14 fields]\n```\n[If a tool fails, try again]\n```\n\n**START NOW with STEP 1.**"
+            }
+          ]
+        },
+        "simplify": false,
+        "options": {
+          "codeExecution": false,
+          "maxOutputTokens": 10000,
+          "temperature": 0.3,
+          "maxToolsIterations": 50
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        400
+      ],
+      "id": "08d4c7cd-7a71-40f1-b303-7f96103102a9",
+      "name": "Business Analyst",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "8eDMUtP7P20s67XX",
+          "name": "Gemini API 10/10/2025"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### **serp_search**, **ai_mode**  Tools. Sub-workflow (Part 0) inputs:\n* function: `serp_search` / `ai_mode` \n* keyword: Defined automatically by the model\n* url: Defined automatically by the model\n* location_code: `{{ $('Get Country & Language Code').item.json.location_code }}`\n* language_code: `{{ $('Get Country & Language Code').item.json.language_code }}`",
+        "width": 640,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        912,
+        -48
+      ],
+      "id": "71961256-4d92-4889-a943-02968aea5077",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "# -> Input",
+        "height": 256,
+        "width": 576,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        320
+      ],
+      "id": "98f29bf3-d98f-489d-8717-cb4be3f43ae4",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 176,
+        "width": 1248,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        128
+      ],
+      "id": "ec5e4ac3-f0cb-4af8-a5e9-085c1e792450",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "content": "## ->  Session Data",
+        "height": 256,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        320
+      ],
+      "id": "b924bdc5-3461-48f9-bdd5-7bc07cb08160",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "# Step 2 - Analyze Business",
+        "height": 80,
+        "width": 464,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -144
+      ],
+      "id": "76bb58b1-abc0-4974-96e7-240e218cc481",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZnsklgmGZiqdWGjq",
+          "mode": "list",
+          "cachedResultName": "Internal Links",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/ZnsklgmGZiqdWGjq"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "keyValue": "=Test123456789"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        672,
+        176
+      ],
+      "id": "2b91de34-5e2c-4c46-a5e0-72b4f84d9a15",
+      "name": "get_internal_Links"
+    },
+    {
+      "parameters": {
+        "content": "\n### **Business Data Table Setup**\nCreate the following n8n Datatable with the exact column names and data types specified below.\n\n**`Business Data`**\n* `session_id` (string)\n* `client_name` (string)\n* `client_country` (string)\n* `client_language` (string)\n* `client_website` (string)\n* `client_description` (string)\n* `target_audience_personas` (string)\n* `brand_personality_matrix` (string)\n* `unique_value_proposition` (string)\n* `primary_competitors` (string)\n* `people_ask` (string)\n* `customer_journey` (string)\n* `customer_persona_trait` (string)\n* `eeat_signal_integration` (string)\n* `GEO_tactic` (string)\n* `call_to_action` (string)",
+        "height": 512,
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        128
+      ],
+      "id": "bddb5ddb-3016-47dc-8f94-b3db90332c20",
+      "name": "Sticky Note28"
+    },
+    {
+      "parameters": {
+        "content": "### **`get_internal_links`** tool Inputs:\n* Function: `Get`\n* Must Match: `All Conditions`\n* session_id: `your_session_id`",
+        "height": 128,
+        "width": 288,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        272,
+        32
+      ],
+      "id": "45d4a573-048d-4641-bbac-19a5a456baf9",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "content": "### **`insert_row_in_data_table`**  \n* session_id: `{{ $('Session ID').item.json.session_id }}`\n* client_name: Defined automatically by the model\n* client_country: `{{ $('Submit Form').item.json.Country }}`\n* client_language: `{{ $('Submit Form').item.json.Language }}`\n* client_website: `{{ $('Submit Form').item.json['Page URL'] }}`\n* client_description: Defined automatically by the model\n* target_audience_personas: Defined automatically by the model\n* brand_personality_matrix: Defined automatically by the model\n* unique_value_proposition: Defined automatically by the model\n* people_ask: Defined automatically by the model\n* customer_journey: Defined automatically by the model\n* customer_persona_trait: Defined automatically by the model\n* eeat_signal_integration: Defined automatically by the model\n* GEO_tactic: Defined automatically by the model\n* call_to_action: Defined automatically by the model",
+        "height": 400,
+        "width": 512,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        128
+      ],
+      "id": "311663b9-2407-40db-ae4f-b52e3de28634",
+      "name": "Sticky Note30"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/image%20(5).png)",
+        "height": 512,
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        128
+      ],
+      "id": "5ca04f6b-41c9-4ef7-a2a1-6939f46cf85e",
+      "name": "Sticky Note32"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/image%20(6).png)",
+        "height": 128,
+        "width": 288,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -96
+      ],
+      "id": "abfe677c-f6cb-4ffd-ba65-750634d5c294",
+      "name": "Sticky Note33"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/image%20(7).png)",
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -48
+      ],
+      "id": "eb856202-dd0f-452e-b5c0-b2ec70b7596c",
+      "name": "Sticky Note34"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/image%20(8).png)",
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -48
+      ],
+      "id": "eebde254-be11-4c5a-8f03-4046fd35f3f5",
+      "name": "Sticky Note35"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "JHK1BmSdiqP7OZrl",
+          "mode": "list",
+          "cachedResultName": "KRW - Page Ranked Keywords",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/JHK1BmSdiqP7OZrl"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "keyword": "={{ $json.Keyword }}",
+            "search_volume": "={{ $json.search_volume }}",
+            "intent": "={{ $json.intent }}",
+            "keyword_difficulty": "={{ $json.keyword_difficulty }}",
+            "competition_level": "={{ $json.competition_level }}",
+            "cpc": "={{ $json.cpc }}",
+            "low_top_of_page_bid": "={{ $json.low_top_of_page_bid }}",
+            "high_top_of_page_bid": "={{ $json.high_top_of_page_bid }}",
+            "session_id": "={{ $('Session ID').first().json.session_id }}",
+            "monthly_search_volume_trend": "={{ $json.monthly_search_volume_trend }}",
+            "quarterly_search_volume_trend": "={{ $json.quarterly_search_volume_trend }}",
+            "yearly_search_volume_trend": "={{ $json.yearly_search_volume_trend }}",
+            "competition_score": "={{ $json.competition_score }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "keyword",
+              "displayName": "keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "search_volume",
+              "displayName": "search_volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "keyword_difficulty",
+              "displayName": "keyword_difficulty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "competition_level",
+              "displayName": "competition_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "competition_score",
+              "displayName": "competition_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cpc",
+              "displayName": "cpc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "low_top_of_page_bid",
+              "displayName": "low_top_of_page_bid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "high_top_of_page_bid",
+              "displayName": "high_top_of_page_bid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "monthly_search_volume_trend",
+              "displayName": "monthly_search_volume_trend",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "quarterly_search_volume_trend",
+              "displayName": "quarterly_search_volume_trend",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "yearly_search_volume_trend",
+              "displayName": "yearly_search_volume_trend",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        656
+      ],
+      "id": "b8d953c6-17ff-483f-ad96-56ed1c3491c9",
+      "name": "Insert Page Ranked Keywords"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f8af75-a560-457b-bf79-e9f5b161cc30",
+              "name": "Keyword",
+              "value": "={{ $json.keyword_data.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "b6387b35-6fe1-4843-9c44-7c86451fef72",
+              "name": "search_volume",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume }}",
+              "type": "number"
+            },
+            {
+              "id": "65a3acda-c5dd-420b-8ad6-7900f129472b",
+              "name": "intent",
+              "value": "={{ $json.keyword_data.search_intent_info.main_intent }}",
+              "type": "string"
+            },
+            {
+              "id": "bb0dcc10-584e-427c-86ea-4e91492a615a",
+              "name": "keyword_difficulty",
+              "value": "={{ $json.keyword_data.keyword_properties.keyword_difficulty }}",
+              "type": "number"
+            },
+            {
+              "id": "74c37ad6-7fe0-404e-8158-e351fb397d03",
+              "name": "competition_level",
+              "value": "={{ $json.keyword_data.keyword_info.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "f390d39f-b464-403b-a5f5-8071dd930b19",
+              "name": "competition_score",
+              "value": "={{ $json.keyword_data.keyword_info.competition }}",
+              "type": "number"
+            },
+            {
+              "id": "a552b665-54d0-4bab-bf9f-770969659cd7",
+              "name": "cpc",
+              "value": "={{ $json.keyword_data.keyword_info.cpc }}",
+              "type": "number"
+            },
+            {
+              "id": "9ef50c56-4b53-4150-a27c-1135cfe33d1a",
+              "name": "low_top_of_page_bid",
+              "value": "={{ $json.keyword_data.keyword_info.low_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "5a1d3517-a048-4bad-9da7-8c1476644c6f",
+              "name": "high_top_of_page_bid",
+              "value": "={{ $json.keyword_data.keyword_info.high_top_of_page_bid }}",
+              "type": "number"
+            },
+            {
+              "id": "59dfd57f-82c6-48e8-a475-cfe2c93cdf41",
+              "name": "monthly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.monthly }}",
+              "type": "number"
+            },
+            {
+              "id": "87ab36e8-2bc0-4f1a-9467-4e09c59c2d4f",
+              "name": "quarterly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.quarterly }}",
+              "type": "number"
+            },
+            {
+              "id": "f00e38e3-a1a8-4f45-9f0c-e83d4077133c",
+              "name": "yearly_search_volume_trend",
+              "value": "={{ $json.keyword_data.keyword_info.search_volume_trend.yearly }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        992,
+        656
+      ],
+      "id": "92594c00-fb75-4bfc-813d-a20336270c54",
+      "name": "Prepare Ranked Keywords"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "page_ranked_keywords",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        656
+      ],
+      "id": "3e695882-6281-40a3-be20-52220c311f58",
+      "name": "Aggregate All"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/dataforseo_labs/google/ranked_keywords/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"target\": \"{{ $('Get Country & Language Code').first().json['Page URL'] }}\",\n    \"location_code\": {{ $('Get Country & Language Code').first().json.location_code }},\n    \"language_code\": \"{{ $('Get Country & Language Code').first().json.language_code }}\",\n    \"limit\": 200\n  }\n]",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        656
+      ],
+      "id": "6fdb87b8-7e83-42fb-9911-675412dd35e1",
+      "name": "Get Page Ranked Keywords",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n5o00CCWcmHFeI1p",
+          "name": "DataForSEO"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dc16e58e-21c6-4658-ad00-5b2e0eca1c9f",
+              "name": "keyword",
+              "value": "={{ $json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "8a7769eb-efab-411a-912c-d1151686c02f",
+              "name": "search_volume",
+              "value": "={{ $json.search_volume }}",
+              "type": "string"
+            },
+            {
+              "id": "2468203a-f8d1-4a36-a4e1-255eea01552c",
+              "name": "intent",
+              "value": "={{ $json.intent }}",
+              "type": "string"
+            },
+            {
+              "id": "497d04bc-8983-4f60-8cf7-e13d93c2b4f7",
+              "name": "keyword_difficulty",
+              "value": "={{ $json.keyword_difficulty }}",
+              "type": "string"
+            },
+            {
+              "id": "5c004db8-dc9b-4a9d-b362-aaf2b2befafa",
+              "name": "competition",
+              "value": "={{ $json.competition_score }}",
+              "type": "string"
+            },
+            {
+              "id": "0e6b2a97-7959-4850-8424-0a4ec8e6b9e9",
+              "name": "competition_level",
+              "value": "={{ $json.competition_level }}",
+              "type": "string"
+            },
+            {
+              "id": "747e9a65-f7ca-44c9-a777-5db54559cf7a",
+              "name": "cpc",
+              "value": "={{ $json.cpc }}",
+              "type": "string"
+            },
+            {
+              "id": "bfeaead9-b8a7-4f06-9bbb-bf768d2e8f97",
+              "name": "low_top_of_page_bid",
+              "value": "={{ $json.low_top_of_page_bid }}",
+              "type": "string"
+            },
+            {
+              "id": "7829a861-338d-486b-8137-aa654fbf471b",
+              "name": "high_top_of_page_bid",
+              "value": "={{ $json.high_top_of_page_bid }}",
+              "type": "string"
+            },
+            {
+              "id": "5053123c-4684-4233-b7be-9702c4ad2eda",
+              "name": "monthly_search_volume_trend",
+              "value": "={{ $json.monthly_search_volume_trend }}",
+              "type": "string"
+            },
+            {
+              "id": "930091e3-76a4-4367-8e1c-8783ecaa1815",
+              "name": "quarterly_search_volume_trend",
+              "value": "={{ $json.quarterly_search_volume_trend }}",
+              "type": "string"
+            },
+            {
+              "id": "d559c751-66f1-460f-80f6-fe25318b7c98",
+              "name": "yearly_search_volume_trend",
+              "value": "={{ $json.yearly_search_volume_trend }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1344,
+        656
+      ],
+      "id": "92671f26-7319-4dce-92a0-28f4aad02dc0",
+      "name": "Prep keywords"
+    },
+    {
+      "parameters": {
+        "content": "## Page Ranked Keywords",
+        "height": 240,
+        "width": 1248,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        592
+      ],
+      "id": "59f2e55c-474e-4342-8045-9acc7c6aa38d",
+      "name": "Sticky Note52"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "tasks[0].result[0].items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        832,
+        656
+      ],
+      "id": "df02389e-a0b7-4a55-9ed6-c50e238b898f",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "content": "`after execution, save the numbers as you will need them in part 3 & 4`",
+        "height": 240,
+        "width": 230,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        592
+      ],
+      "id": "6d0f01e1-7f46-47ec-b5de-5fdcc9fa7073",
+      "name": "Sticky Note67"
+    },
+    {
+      "parameters": {
+        "content": "insert the  `internal_links_session_id` from part 1",
+        "height": 96,
+        "width": 230,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        272,
+        160
+      ],
+      "id": "0c0e0f9b-0408-44df-a0cf-0518ca69c0ae",
+      "name": "Sticky Note69"
+    },
+    {
+      "parameters": {
+        "content": "`Run it once and forget about it, just remember the session id as it is important`",
+        "height": 80,
+        "width": 256,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        -144
+      ],
+      "id": "44b06fd8-a19b-4901-9461-970fdab0d418",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://static.vecteezy.com/system/resources/thumbnails/058/991/165/small/red-right-arrow-icon-orientation-direction-pointing-forward-cut-out-transparent-png.png)",
+        "height": 96,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        496,
+        160
+      ],
+      "id": "ef4be7e5-0b7b-49c7-9652-28a65eacbfa3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 128,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        160
+      ],
+      "id": "e377e9f5-3ba7-4387-b28c-0722530695ca",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "**`Page Ranked Keywords`** Data Table\nCreate the following n8n Datatable with the exact column names and data types specified below.\n* `keyword` (string)\n* `search_volume` (number)\n* `intent` (string)\n* `keyword_difficulty` (number)\n* `competition_level` (string)\n* `competition_score` (number)\n* `cpc` (number)\n* `low_top_of_page_bid` (number)\n* `high_top_of_page_bid` (number)\n* `monthly_search_volume_trend` (number)\n* `quarterly_search_volume_trend` (number)\n* `yearly_search_volume_trend` (number)\n* `session_id` (string)\n",
+        "height": 400,
+        "width": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        848
+      ],
+      "id": "c45309c5-047c-4d98-93c7-0d6cbbce90c4",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### **`Insert Page Ranked Keywords** node input:\n* keyword: `{{ $json.Keyword }}`\n* search_volume: `{{ $json.search_volume }}`\n* intent: `{{ $json.intent }}`\n* keyword_difficulty: `{{ $json.keyword_difficulty }}`\n* competition_level: `{{ $json.competition_level }}`\n* competition_score: `{{ $json.competition_score }}`\n* cpc: `{{ $json.cpc }}`\n* low_top_of_page_bid: `{{ $json.low_top_of_page_bid }}`\n* high_top_of_page_bid: `{{ $json.high_top_of_page_bid }}`\n* monthly_search_volume_trend: `{{ $json.monthly_search_volume_trend }}`\n* quarterly_search_volume_trend: `{{ $json.quarterly_search_volume_trend }}`\n* yearly_search_volume_trend: `{{ $json.yearly_search_volume_trend }}`\n* session_id: `{{ $('Session ID').first().json.session_id }}`",
+        "height": 400,
+        "width": 512,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        848
+      ],
+      "id": "1fab03e8-0207-4943-b1b5-8cbe7af0bc35",
+      "name": "Sticky Note31"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Screenshot%202025-11-06%20224919.png)",
+        "height": 400,
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        848
+      ],
+      "id": "098c6040-0891-42f0-b873-db48f6ae333d",
+      "name": "Sticky Note36"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b9b69d8-ab3e-4ee0-b6d3-2dcfb41832ea",
+              "name": "session_id",
+              "value": "={{ $('Session ID').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "60ec7b85-f558-4bdf-b79d-f24907184718",
+              "name": "location_code",
+              "value": "={{ $('Get Country & Language Code').item.json.location_code }}",
+              "type": "number"
+            },
+            {
+              "id": "833bc73b-7f47-4d27-9ff5-e814028b1fe1",
+              "name": "language_code",
+              "value": "={{ $('Get Country & Language Code').item.json.language_code }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1680,
+        400
+      ],
+      "id": "f56bbfde-5610-4f53-874d-7ea7ee79d02b",
+      "name": "Get Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b9b69d8-ab3e-4ee0-b6d3-2dcfb41832ea",
+              "name": "session_id",
+              "value": "={{ $('Session ID').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "60ec7b85-f558-4bdf-b79d-f24907184718",
+              "name": "location_code",
+              "value": "={{ $('Get Country & Language Code').item.json.location_code }}",
+              "type": "number"
+            },
+            {
+              "id": "833bc73b-7f47-4d27-9ff5-e814028b1fe1",
+              "name": "language_code",
+              "value": "={{ $('Get Country & Language Code').item.json.language_code }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1680,
+        672
+      ],
+      "id": "98f0735c-6e52-492a-a57e-eb8580d3a4ef",
+      "name": "Get Session Data"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Rankenstein%20v9.png)",
+        "height": 384,
+        "width": 736,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -528
+      ],
+      "id": "83435d0f-14d8-4112-8fc4-5ac34b621866",
+      "name": "Sticky Note38"
+    },
+    {
+      "parameters": {
+        "content": "## **Rankenstein v9 -> Step 2 - Business Analysis** 🚀\nHere’s a simple guide to get your workflow up and running.\n\n## **1. Set Up Your Data Tables 🗂️**\nPlease use the separate **Datatable Setup Guide** for the exact table names and columns. Getting this right is super important!\n\n## **2. Connect Your API Keys 🔑**\nFind the nodes that require credentials and set up your API keys.\n* **Firecrawl**: [Firecrawl Website](https://www.firecrawl.dev/) (url_search)\n* **Perplexity**: [Perplexity Docs](https://docs.perplexity.ai/) (online_search & deep_research)\n* **DataforSEO**: [DataForSEO API](https://dataforseo.com/) (Get Page Ranked Keywords)\n\n## **3. Configure the AI Agent 🤖**\nYou'll need to add your **Gemini** API key in the `Business Analyst` AI Agent. You can get the API key from [Google AI Studio](https://aistudio.google.com).\n### **Business Analyst**\n* **Model:** Gemini 2.5 Pro\n* **Connections:**\n  * `online_search` & `deep_research` → **Perplexity**\n  * `url_search` → **Firecrawl**\n  * `insert_row_in_data_table` → **Business Data Table**\n  * `get_internal_links` -> **Internal Links Data Table** \n  * `serp_search` & `ai_mode` → **Part 0 - Tools**\n* Make sure its **Data Table** is linked to the correct `Business Data Table` so it can save findings.\n\n### **👉 IMPORTANT: Test As You Go!**\nBefore activating the whole workflow, **test each node individually**. Click a node, press the 'Play' button on it, and see if it works. This is the fastest way to find and fix any problems!",
+        "height": 816,
+        "width": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        320
+      ],
+      "id": "540ac99f-4bfb-4403-a759-bb3e2e0116c1",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/ai%20marketing%20hub.png)",
+        "height": 176,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        656
+      ],
+      "id": "1330a760-f1b5-4b34-a6f4-59f7836f7cc1",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "**Workflow created by [@AgriciDaniel](https://www.youtube.com/@AgriciDaniel)**\n* [AI Marketing Hub](https://www.skool.com/ai-marketing-hub)\n* [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro)",
+        "height": 96,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        816
+      ],
+      "id": "6aa80258-1f81-46a1-8f9e-a4372e6a8180",
+      "name": "Sticky Note9"
+    }
+  ],
+  "pinData": {
+    "Get Session Data": [
+      {
+        "json": {
+          "session_id": "cc86578",
+          "location_code": 2642,
+          "language_code": "ro"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Get Country & Language Code": {
+      "main": [
+        [
+          {
+            "node": "Session ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Form": {
+      "main": [
+        [
+          {
+            "node": "Get Country & Language Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL_search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Session ID": {
+      "main": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_row_in_data_table": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "online_Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "serp_Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai_Mode": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deep_research": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Analyst": {
+      "main": [
+        [
+          {
+            "node": "Get Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_internal_Links": {
+      "ai_tool": [
+        [
+          {
+            "node": "Business Analyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Page Ranked Keywords": {
+      "main": [
+        [
+          {
+            "node": "Prep keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Ranked Keywords": {
+      "main": [
+        [
+          {
+            "node": "Insert Page Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Page Ranked Keywords": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep keywords": {
+      "main": [
+        [
+          {
+            "node": "Aggregate All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Prepare Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate All": {
+      "main": [
+        [
+          {
+            "node": "Get Session Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Data": {
+      "main": [
+        [
+          {
+            "node": "Get Page Ranked Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "359a767a-955f-4723-8246-6efe1f689469",
+  "meta": {
+    "instanceId": "1ee7b11b3a4bb285563e32fdddf3fbac26379ada529b942ee7cda230735046a1"
+  },
+  "id": "ubAgzeuee4qEOl6S",
+  "tags": []
+}

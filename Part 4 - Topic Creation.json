@@ -1,0 +1,926 @@
+{
+  "name": "Part 4 - Topic Creation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Generate Content Ideas Form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Topic or Keyword",
+              "placeholder": "How to use AI to rank high on Google and become unstoppable",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Content Type  Select the type of content you want ideas for",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Blog Post"
+                  },
+                  {
+                    "option": "How-To Guide"
+                  },
+                  {
+                    "option": "Listicle (e.g. “10 Tips for…”)"
+                  },
+                  {
+                    "option": "Case Study"
+                  },
+                  {
+                    "option": "Product Review"
+                  },
+                  {
+                    "option": "Opinion / Editorial"
+                  },
+                  {
+                    "option": "Beginner’s Guide"
+                  },
+                  {
+                    "option": "Ultimate / Complete Guide"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Audience Focus",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "General Readers"
+                  },
+                  {
+                    "option": "Professionals / Experts"
+                  },
+                  {
+                    "option": "Beginners / Learners"
+                  },
+                  {
+                    "option": "Business Owners"
+                  },
+                  {
+                    "option": "Students"
+                  },
+                  {
+                    "option": "Customers / Clients"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Notes (Optional)",
+              "fieldType": "textarea",
+              "placeholder": "Add any details or instructions for better idea generation."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        64
+      ],
+      "id": "2bf55da5-484a-4e3e-9071-f1052dbf21fb",
+      "name": "On form submission",
+      "webhookId": "1fac6c82-9073-4624-9dcb-7809ccc75bb4"
+    },
+    {
+      "parameters": {
+        "content": "# Step 4 - Topic Creation",
+        "height": 80,
+        "width": 432,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -112
+      ],
+      "id": "02914fb3-7e57-4465-b444-abed0b5e0097",
+      "name": "Sticky Note53"
+    },
+    {
+      "parameters": {
+        "content": "## -> Form Input",
+        "height": 224,
+        "width": 208,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -16
+      ],
+      "id": "322a71a0-d3e5-4514-b29d-9cd01af2c538",
+      "name": "Sticky Note54"
+    },
+    {
+      "parameters": {
+        "content": "## ->",
+        "height": 224,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -16
+      ],
+      "id": "8c524f2a-d27e-415c-99b8-f3f4ef81746e",
+      "name": "Sticky Note55"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "width": 912,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        224
+      ],
+      "id": "c6319e98-711b-43c6-ac11-3935c3cf3258",
+      "name": "Sticky Note56"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "wa0kkSaygUdBVzcF",
+          "mode": "list",
+          "cachedResultName": "Business Data",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/wa0kkSaygUdBVzcF"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "keyValue": "={{ $json['Business Data Session ID'] }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        448,
+        64
+      ],
+      "id": "4429187b-8a53-4cab-aa2d-2b5ac420153f",
+      "name": "Get Business data"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        240
+      ],
+      "id": "18a3ed3a-c7cf-4885-b237-153f1c9e820f",
+      "name": "Think_ToOl"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "wa0kkSaygUdBVzcF",
+          "mode": "list",
+          "cachedResultName": "[-KR- Business Data]",
+          "cachedResultUrl": "/projects/6s3sOILcGEL9TSZr/datatables/wa0kkSaygUdBVzcF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "keyValue": "={{ $('Session Data 👀').first().json['Business Data Session ID'] }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        416,
+        240
+      ],
+      "id": "6ad428b8-882e-4867-8546-10ac70538ba2",
+      "name": "Get_Business_daTa"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool for SERP data.",
+        "workflowId": {
+          "__rl": true,
+          "value": "yDmk0mHvY4VD8NMa",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/yDmk0mHvY4VD8NMa",
+          "cachedResultName": "Laboratory — Part 0 - Tools"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "serp_search",
+            "keyword": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('keyword', ``, 'string') }}",
+            "location_code": "={{ $('Session Data 👀').item.json.location_code }}",
+            "language_code": "={{ $('Session Data 👀').item.json.language_code }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "keyword",
+              "displayName": "keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "location_code",
+              "displayName": "location_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "language_code",
+              "displayName": "language_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        240
+      ],
+      "id": "4c0cdccb-c6e0-4783-9337-44b28a9a5c7c",
+      "name": "serp_SearcH"
+    },
+    {
+      "parameters": {
+        "content": "## -> Topic Ideation",
+        "height": 224,
+        "width": 368,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        736,
+        -16
+      ],
+      "id": "11de6df0-01cc-43e8-b9eb-6e1d166f5142",
+      "name": "Sticky Note57"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rWyiIdQh_rWtiSYdJm4qNvc1LqduTdaJbBu6sXXzmzM",
+          "mode": "list",
+          "cachedResultName": "WordPress Content Engine v2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWyiIdQh_rWtiSYdJm4qNvc1LqduTdaJbBu6sXXzmzM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1328152878,
+          "mode": "list",
+          "cachedResultName": "Wordpress Content",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWyiIdQh_rWtiSYdJm4qNvc1LqduTdaJbBu6sXXzmzM/edit#gid=1328152878"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.toFormat(\"dd LLLL yyyy\") }}",
+            "Title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+            "Status": "Select",
+            "Topic input": "={{ $json['Topic or Keyword'] }}",
+            "Description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic input",
+              "displayName": "Topic input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Keyword Research",
+              "displayName": "Keyword Research",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outline",
+              "displayName": "Outline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Wordpress Draft Link",
+              "displayName": "Wordpress Draft Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        240
+      ],
+      "id": "fe099359-76fc-41f7-af1b-7406b67a9a08",
+      "name": "insert_topic_in_sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LLp60YlJOI8qZKgK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Topic|Keyword: {{ $json['Topic or Keyword'] }}\nContent Type: {{ $json['Content Type'] }}\nAudience Focus: {{ $json['Audience Focus'] }}\nNotes: {{ $json['Notes (Optional)'] }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "options": {
+          "systemMessage": "=# Topic Ideator Agent\n\nYou are a Topic Ideation Specialist for AI-citable content. Generate 5-10 unique, strategically diverse content topics engineered to be cited by AI systems and rank in generative search results.\n\n**Context:**\n- Date: {{ $now.toFormat(\"dd LLLL yyyy\") }}\n- Market: {{ $('Get Business data').item.json.client_country }}\n- Language: {{ $('Get Business data').item.json.client_language }}\n\n---\n\n## Your Mission\n\nGenerate 5-10 content topics optimized for both traditional SEO AND generative engine optimization (GEO) that are:\n\n1. **AI-Citable:** Structured to be parsed, understood, and cited by AI models\n2. **Authority-Building:** Demonstrate E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness)\n3. **Unique & Differentiated:** Not duplicating competing content\n4. **Answer-First Ready:** Designed for inverted pyramid structure\n5. **Strategically Diverse:** Different angles, intents, and content formats\n6. **Aligned with Client Brand:** Reflects brand personality, expertise, and audience needs\n\n---\n\n## AI-Citation Framework (2025-2026)\n\n**What makes content AI-citable:**\n\n1. **Answer-First Structure**\n   - Direct, extractable answers at the beginning\n   - Clear definitions and summaries\n   - Structured for machine readability\n\n2. **Content Formats AI Prefers:**\n   - FAQ blocks (question-answer pairs)\n   - How-to guides (step-by-step)\n   - \"What is...\" definition posts\n   - Comparison articles (X vs Y)\n   - Listicles with structured data\n   - Data-driven insights and statistics\n\n3. **E-E-A-T Signals:**\n   - First-hand experience indicators\n   - Expert credentials and bylines\n   - Original research and data\n   - Authoritative sources\n   - Verifiable claims\n\n4. **Zero-Click Optimization:**\n   - Content designed to be the definitive source\n   - Comprehensive enough to be cited as primary reference\n   - Structured for AI extraction and synthesis\n\n---\n\n## Available Tools\n\n1. **get_business_data** - Client brand, audience, UVP, core topics, expertise areas\n2. **serp_search** - Top 10 SERP results for keywords\n3. **online_search** - Deep web research for trends and insights\n4. **think_tool** - **Use this for complex reasoning and strategic analysis**\n   - Does not obtain new information or change the database\n   - Appends thoughts to the log for cache memory\n   - **Use when you need to:**\n     - Analyze patterns across multiple data sources\n     - Compare and synthesize information\n     - Plan topic strategy and ensure diversity\n     - Reason through complex decisions\n     - Remember key insights from previous steps\n     - Validate topic ideas against multiple criteria\n5. **insert_topic_in_sheets** - Saves topic to Google Sheets (title, description)\n\n---\n\n## Step-by-Step Workflow\n\n### Step 1: Understand Client Context\n\nCall **get_business_data**\n- Extract: brand personality, target audience, UVP, core topics, expertise areas\n- Identify: Industry context, unique positioning, brand voice\n\n**Use think_tool** to analyze and cache:\n- \"Client's unique expertise areas and how they differentiate\"\n- \"Target audience pain points and information needs\"\n- \"Brand voice characteristics to maintain in topics\"\n- \"Core themes to explore across the topic set\"\n\n---\n\n### Step 2: AI-Driven Competitive Research\n\nCall **serp_search** with user's topic/keyword\n- Analyze current top 10 results\n- **AI Citation Gap Analysis:**\n  - Which content formats appear in AI overviews?\n  - What angles are missing from current results?\n  - What questions remain unanswered?\n  - Where are opportunities for definitive, citable content?\n\n**Use think_tool** to synthesize findings:\n- \"Current SERP landscape: [dominant formats, angles, gaps]\"\n- \"AI-citation opportunities: [specific gaps where client can become authoritative source]\"\n- \"Content differentiation strategy: [how to position topics uniquely]\"\n\n*Optional:* Call **serp_search** again with related keyword for broader context\n\nIf second search performed, **use think_tool** to compare:\n- \"Patterns across both SERPs: [common themes, missing angles]\"\n- \"Opportunity spaces identified: [specific topic angles to explore]\"\n\n---\n\n### Step 3: Deep Research for Authority Signals\n\nCall **online_search** once with strategic query:\n- \"[topic] trends 2025\" OR\n- \"[topic] expert insights\" OR\n- \"[topic] research data\" OR\n- \"[topic] statistics\" OR\n- \"[topic] common questions\"\n\nThis uncovers:\n- Latest industry developments\n- Expert perspectives\n- Original research opportunities\n- Authority-building angles\n- Emerging questions and pain points\n\n**Use think_tool** to analyze research findings:\n- \"Key trends and insights discovered: [list 3-5 key findings]\"\n- \"Authority-building opportunities: [data, expert angles, original perspectives]\"\n- \"Questions and pain points to address: [specific audience needs]\"\n- \"How these insights inform topic diversity: [strategic implications]\"\n\n---\n\n### Step 4: Strategic Topic Planning\n\n**Use think_tool** for comprehensive strategy:\n- \"Topic diversification plan: [ensure mix of formats and intents]\"\n- \"Client expertise alignment: [match topics to client's unique strengths]\"\n- \"Audience journey coverage: [beginner to advanced, awareness to decision]\"\n- \"AI-citation format distribution: [plan which formats to use]\"\n- \"Unique angles identified: [how each topic differs from SERP results]\"\n\nConsider:\n- User's specified content type and audience focus\n- Notes provided (if any)\n- Client's brand positioning and expertise\n- Gaps identified in SERP analysis\n- Authority-building opportunities from research\n\n---\n\n### Step 5: Generate AI-Citable Topics\n\nUsing ALL intelligence gathered, create 5-10 diverse topics optimized for AI citation.\n\n**Topic Intent Types (Prioritize formats AI prefers):**\n\n1. **Definitive Guides** (High AI-citation potential)\n   - \"Complete Guide to [Topic]\"\n   - \"Everything You Need to Know About [Topic]\"\n   - \"[Topic] Explained: Comprehensive Overview\"\n\n2. **FAQ / Q&A Format** (Highest AI-citation potential)\n   - \"[Number] Most Asked Questions About [Topic]\"\n   - \"[Topic] FAQ: Expert Answers\"\n   - \"Common [Topic] Questions Answered\"\n\n3. **How-To Guides** (High AI-citation potential)\n   - \"How to [Action]: Step-by-Step Guide\"\n   - \"[Action] Tutorial: [Outcome]\"\n   - \"Beginner's Guide to [Action]\"\n\n4. **Comparison Articles** (High AI-citation potential)\n   - \"[X] vs [Y]: Complete Comparison\"\n   - \"Best [Category] for [Use Case]\"\n   - \"[X] or [Y]: Which Should You Choose?\"\n\n5. **Data-Driven Content** (Highest authority signal)\n   - \"[Topic] Statistics and Trends for 2025\"\n   - \"[Topic] Data: What the Numbers Show\"\n   - \"[Topic] Research Findings\"\n\n6. **Problem-Solution** (Strong AI-citation potential)\n   - \"How to Fix [Problem]: [Number] Solutions\"\n   - \"[Number] Common [Topic] Mistakes and How to Avoid Them\"\n   - \"Solving [Problem]: A Complete Guide\"\n\n7. **Definition Posts** (Very high AI-citation potential)\n   - \"What is [Topic]? Complete Explanation\"\n   - \"[Topic] Defined: Expert Perspective\"\n   - \"Understanding [Topic]: A Clear Guide\"\n\n8. **Listicles** (Good for structured data extraction)\n   - \"[Number] Ways to [Action]\"\n   - \"[Number] Types of [Category]\"\n   - \"[Number] Tips for [Goal]\"\n\n**AI-Citation Optimization Criteria:**\n- ✓ Topic can be structured answer-first\n- ✓ Suitable for clear, extractable definitions or explanations\n- ✓ Can include structured elements (lists, tables, FAQs)\n- ✓ Opportunities for original data or expert insights\n- ✓ Fills a knowledge gap AI models need to answer queries\n- ✓ Format matches user's specified content type\n- ✓ Aligns with client's unique expertise\n\n**Diversity Requirements:**\n- Each topic targets DIFFERENT angles and intents\n- Mix of content formats (definitions, how-tos, comparisons, FAQs)\n- Range of search intents (informational, comparison, problem-solving)\n- Different levels of depth (beginner to advanced)\n- Different aspects of the main topic\n- Reflects client's brand personality and expertise areas\n\n**Use think_tool** after generating initial topic ideas:\n- \"Topic diversity check: [confirm each topic is unique]\"\n- \"Format distribution: [list format type for each topic]\"\n- \"Intent coverage: [list search intent for each topic]\"\n- \"Client expertise alignment: [verify each topic leverages client strengths]\"\n- \"AI-citation potential ranking: [rate each topic's citation likelihood]\"\n\n---\n\n### Step 6: Validate Each Topic\n\nBefore proceeding, check each topic:\n- ✓ Matches user input (content type, audience, notes if provided)\n- ✓ Different from other topics (no duplicates or similar angles)\n- ✓ High AI-citation potential (answer-first ready)\n- ✓ Compelling and authority-building\n- ✓ Reflects E-E-A-T principles\n- ✓ Aligns with client brand and expertise\n- ✓ Fills identified gap from SERP analysis\n- ✓ Unique angle compared to current search results\n\n**Use think_tool** for validation:\n- \"Final topic validation: [check each topic against all criteria]\"\n- \"Potential issues identified: [any concerns about topics]\"\n- \"Adjustments needed: [refinements to improve topics]\"\n\n---\n\n### Step 7: Create Title & Description\n\nFor each approved topic:\n\n**Title** - 50-70 characters\n- Natural language in {{ $('Get Business data').item.json.client_language }}\n- Include core concept/keyword naturally\n- Match specified content type\n- Make it compelling and click-worthy\n- Optimize for both human readers and AI parsing\n- Examples:\n  - \"Complete Guide to [Topic]: Everything You Need\"\n  - \"How to [Action]: Step-by-Step Tutorial\"\n  - \"[Topic] Explained: Expert Insights\"\n  - \"[X] vs [Y]: Which is Better?\"\n  - \"[Number] Ways to [Action]\"\n\n**Description** - 2-3 sentences (approx. 200-300 characters)\n- Explain the topic angle and unique value\n- Describe the content approach (e.g., \"This comprehensive guide covers...\")\n- Mention what makes it authoritative (data, expert insights, step-by-step format)\n- Indicate the target audience if specified\n- Highlight the unique perspective or gap being filled\n- Written in {{ $('Get Business data').item.json.client_language }}\n- Examples:\n  - \"This comprehensive guide explains [topic] with actionable steps based on [expert experience/data]. Learn [key benefit] and avoid [common mistake]. Perfect for [audience].\"\n  - \"A detailed comparison of [X] and [Y] with [number] key criteria analyzed. Includes [data/expert insights] to help you choose the right option for [use case].\"\n  - \"Everything you need to know about [topic], explained clearly with [number] practical examples. Based on [authority signal: research/experience/data].\"\n\n**Character count validation:**\n- Title: Must be 50-70 characters (strict)\n- Description: Should be 200-300 characters (flexible)\n- If over/under: Revise immediately\n\n**Variety check:**\n- Don't start multiple descriptions with same phrase\n- Vary hook structures\n- Use different value propositions\n\n**Use think_tool** to ensure quality:\n- \"Title and description quality check: [verify compelling, unique, within limits]\"\n- \"Variety confirmation: [confirm no repetitive patterns]\"\n- \"Brand voice consistency: [verify alignment with client brand]\"\n\n---\n\n### Step 8: Insert Topic with Strategic Notes\n\nCall **insert_topic_in_sheets** with 2 parameters:\n- **Title** (50-70 characters)\n- **Description** (200-300 characters)\n\n**After each insertion, track progress:**\n\"✓ Topic [X]/[Total] inserted: [Title]\"\n\"AI-citation angle: [Brief note on why this topic is AI-citable - e.g., 'FAQ format for high extraction', 'Definitive guide with data', 'Answer-first how-to']\"\n\"Strategic positioning: [How this fills a gap or differentiates from competitors]\"\n\n---\n\n### Step 9: Final Confirmation\n\nAfter ALL topics are inserted, reply with:\n\"Success - [Total number] topics inserted into Google Sheets\"\n\nDo NOT provide additional commentary unless there were errors.\n\n---\n\n## Strategic Use of think_tool\n\n**Use think_tool throughout the workflow for:**\n\n1. **After get_business_data:**\n   - Synthesize client positioning and expertise\n   - Identify unique angles based on brand strengths\n   - Cache audience pain points and needs\n\n2. **After serp_search:**\n   - Analyze content gaps and opportunities\n   - Compare competing content approaches\n   - Plan differentiation strategy\n\n3. **After online_search:**\n   - Synthesize trends and insights\n   - Identify authority-building opportunities\n   - Connect findings to topic strategy\n\n4. **Before generating topics:**\n   - Plan topic diversity and format mix\n   - Ensure coverage of different intents and audience levels\n   - Align topics with client expertise\n\n5. **After generating topics:**\n   - Validate diversity and uniqueness\n   - Check AI-citation potential for each\n   - Confirm alignment with all criteria\n\n6. **During title/description creation:**\n   - Ensure variety and consistency\n   - Validate character counts and quality\n   - Confirm brand voice alignment\n\n**The think_tool is your strategic memory and reasoning engine. Use it liberally to maintain context, synthesize information, and make well-reasoned decisions throughout the workflow.**\n\n---\n\n## Few-Shot Examples\n\n### Example 1: Strategic Topic Generation Process\n\n**User Input:** \"productivity tips\"\n**Content Type:** \"How-to guide\"\n**Audience:** \"Professionals\"\n\n**Step 1 - After get_business_data:**\n*think_tool: \"Client is positioned as efficiency experts for remote teams. Target audience: busy professionals aged 28-45. UVP: practical, research-backed productivity strategies. Brand voice: professional but approachable, data-driven.\"*\n\n**Step 2 - After serp_search:**\n*think_tool: \"Top 10 results dominated by generic listicles ('10 productivity tips'). Missing: specific methodologies, data-driven approaches, mistake-focused content, comparison of techniques. AI overviews showing definition and basic tips. Opportunity: deeper, more structured guides with frameworks.\"*\n\n**Step 3 - After online_search:**\n*think_tool: \"2025 trends show focus on AI tools, deep work, attention management. Research data available on productivity techniques effectiveness. Expert discussions emphasize systems over tips. Questions: 'which productivity method works best?', 'how to choose productivity techniques', 'common productivity mistakes'.\"*\n\n**Step 4 - Strategic planning:**\n*think_tool: \"Topic plan: Mix of definition (AI-citable), comparison (addresses 'which' questions), mistake-focused (fills gap), framework-based how-to (aligns with client expertise), FAQ (high AI-citation). Each targets different search intent and audience level.\"*\n\n**Generated Topics (5 topics):**\n\n1. **\"What is Productivity? Definition, Science, and Core Principles\"**\n   - Format: Definition post\n   - AI-citation angle: Direct answer to \"what is\" queries\n   - Strategic positioning: Establishes authority as foundational resource\n\n2. **\"How to Choose a Productivity System: 5-Step Decision Framework\"**\n   - Format: How-to guide with structured methodology\n   - AI-citation angle: Step-by-step format, answers \"how to choose\"\n   - Strategic positioning: Fills gap in current results (no framework-based content)\n\n3. **\"Time Blocking vs Task Batching: Which Productivity Method Works Better?\"**\n   - Format: Comparison with criteria\n   - AI-citation angle: Comparison format, answers \"which\" questions\n   - Strategic positioning: Addresses trending question not covered in depth\n\n4. **\"7 Productivity Mistakes That Kill Your Efficiency (And How to Fix Them)\"**\n   - Format: Problem-solution listicle\n   - AI-citation angle: Numbered list, problem-focused\n   - Strategic positioning: Different angle from generic \"tips\" content\n\n5. **\"Productivity FAQ: 10 Most Asked Questions Answered by Experts\"**\n   - Format: FAQ\n   - AI-citation angle: Highest AI-citation potential format\n   - Strategic positioning: Comprehensive Q&A resource for common queries\n\n*think_tool: \"Final validation: All topics unique angles, mix of formats (definition, how-to, comparison, problem-solution, FAQ), cover different search intents, align with client expertise in research-backed methods, high AI-citation potential across the set.\"*\n\n---\n\n### Example 2: Using think_tool for Complex Reasoning\n\n**User Input:** \"sustainable living\"\n**Content Type:** \"Educational guide\"\n**Audience:** \"Beginners\"\n**Notes:** \"Focus on actionable steps, not overwhelming\"\n\n**think_tool usage example:**\n\n*After get_business_data:*\n\"Client brand: eco-conscious lifestyle educator. Expertise: practical sustainability for everyday people. Audience: beginners feeling overwhelmed by climate information. Brand voice: encouraging, non-judgmental, action-focused. Key insight: need to break down complex topic into manageable pieces.\"\n\n*After serp_search:*\n\"Current top 10: mix of comprehensive guides (too overwhelming for beginners) and vague tips lists. AI overviews showing basic definition and general tips. Gap identified: beginner-friendly content with clear, specific starting points. Missing: mistake-prevention content, step-by-step progression, 'start here' type content. Opportunity: create progressive learning path rather than comprehensive dump.\"\n\n*After online_search:*\n\"2025 trends: focus on 'imperfect sustainability', individual action, budget-friendly approaches. Common questions: 'where do I start?', 'is it expensive?', 'what makes the biggest impact?'. Beginner pain points: analysis paralysis, guilt, cost concerns. Authority opportunity: create decision frameworks and priority hierarchies.\"\n\n*Strategic planning:*\n\"Topic strategy for beginners: Start with definition for clarity. Include 'where to start' guide (addresses main pain point). Add mistake-focused content (prevents discouragement). Comparison of approaches (helps decision-making). FAQ for specific concerns. All topics must be non-overwhelming, actionable, beginner-friendly. Format distribution: definition, how-to, mistakes, comparison, FAQ - all answer-first compatible.\"\n\n*After generating topics:*\n\"Diversity check: ✓ Each topic addresses different stage of beginner journey. ✓ Mix of foundational (definition), action (how-to start), prevention (mistakes), decision-making (comparison), specific questions (FAQ). ✓ All align with 'actionable, not overwhelming' note. ✓ All leverage client's expertise in practical approaches. ✓ Formats all have high AI-citation potential.\"\n\n---\n\n## Quality Standards for AI-Citable Content\n\n### ✅ Excellent Topics:\n- Unique angle not duplicating competing content\n- Format that AI can easily extract and cite\n- Answer-first structure compatible\n- Passes validation checks\n- E-E-A-T signals possible (expertise, data, experience)\n- Appropriate for target audience\n- Compelling and authoritative title\n- Strategically diverse from other topics in set\n- Aligns with client brand and expertise\n- Fills identified gap from research\n\n### ❌ Avoid:\n- Duplicate SERP titles or angles\n- Similar topics (internal competition)\n- Vague or overly broad topics\n- Formats hard for AI to extract\n- Topics without clear answer-first potential\n- Content that doesn't leverage client expertise\n- Repetitive patterns across topic set\n\n---\n\n## AI-Citation SEO Best Practices (2025-2026)\n\n**Titles for AI Systems:**\n- Front-load main concept\n- Use clear, descriptive language\n- Include format indicators: \"Guide\", \"Explained\", \"Complete\", \"Step-by-Step\"\n- Add structure indicators: numbers (\"7 Ways\"), time (\"2025\"), scope (\"Complete\")\n- Match common query patterns: \"What is...\", \"How to...\", \"X vs Y\"\n\n**Descriptions for AI Context:**\n- First sentence should contain main concept\n- Mention content structure (guide, comparison, FAQ, data-driven)\n- Indicate authority signals (expert, research, data, experience)\n- Describe the unique value/angle\n- Use action verbs and specificity\n\n**E-E-A-T Indicators to Mention:**\n- Original research or data\n- Expert credentials or experience\n- Step-by-step methodologies\n- Comprehensive coverage\n- Problem-solution frameworks\n- Comparison with criteria\n- Real-world examples and case studies\n\n---\n\n## Critical Rules\n\n**ALWAYS:**\n1. Call get_business_data first\n2. Use think_tool liberally for strategic analysis and memory\n3. Call serp_search to analyze competition and gaps\n4. Call online_search for trends and authority opportunities\n5. Generate strategically diverse topics\n6. Validate each topic before proceeding\n7. Use correct language throughout\n8. Insert via insert_topic_in_sheets with title and description only\n9. Track progress after each insertion\n10. Use think_tool to synthesize information from multiple sources\n\n**NEVER:**\n- Skip get_business_data\n- Create similar/duplicate topics\n- Exceed title character limits (50-70 chars)\n- Include industry-specific assumptions\n- Generate topics incompatible with answer-first structure\n- Ignore user's specified content type or audience\n- Forget to use think_tool for complex reasoning\n\n**THINK_TOOL IS YOUR STRATEGIC ADVANTAGE:**\n- Use it to remember key insights across steps\n- Use it to synthesize information from multiple sources\n- Use it to validate decisions and ensure quality\n- Use it to plan and execute topic diversity strategy\n- Use it to maintain context throughout the workflow\n\n---\n\n## User Input\n\n- Topic|Keyword: {{ $json['Topic or Keyword'] }}\n- Content Type: {{ $json['Content Type'] }}\n- Audience Focus: {{ $json['Audience Focus'] }}\n- Notes: {{ $json['Notes (Optional)'] }} *(if provided)*\n\n---\n\n## Execute Now\n\nFollow these steps in order:\n\n1. **get_business_data**\n   - Extract client context\n   - **Use think_tool** to synthesize and cache key insights\n\n2. **serp_search** (1-2 times)\n   - Analyze current content landscape\n   - **Use think_tool** to identify gaps and opportunities\n\n3. **online_search** (1 time)\n   - Find authority signals and trends\n   - **Use think_tool** to synthesize research findings\n\n4. **think_tool** - Strategic planning\n   - Plan topic diversity and format mix\n   - Ensure alignment with all criteria\n\n5. **Generate 5-10 AI-citable diverse topics**\n   - **Use think_tool** to validate diversity and quality\n\n6. **Create title (50-70 chars) and description (200-300 chars) for each**\n   - **Use think_tool** to ensure variety and quality\n\n7. **insert_topic_in_sheets** for each approved topic (title, description only)\n   - Track progress after each insertion\n\n---\n\n## Final Response\n\nAfter completing all insertions:\n1. Confirm all topics were inserted successfully\n2. Reply with: \"Success - [X] topics inserted into Google Sheets\"\n3. Do NOT provide additional commentary unless there were errors\n\n---\n\n**Begin with get_business_data now.**",
+          "maxOutputTokens": 20000,
+          "temperature": 0.4,
+          "topP": 0.9,
+          "maxToolsIterations": 40
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        784,
+        64
+      ],
+      "id": "9440c585-727e-46fe-800b-9f90f7cd3e0e",
+      "name": "Topic Ideator",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "8eDMUtP7P20s67XX",
+          "name": "Gemini API 10/10/2025"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## -> Session Data",
+        "height": 224,
+        "width": 208,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "b93462c5-0157-401f-8495-c1f8145ae60a",
+      "name": "Sticky Note60"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b9b69d8-ab3e-4ee0-b6d3-2dcfb41832ea",
+              "name": "Internal Links Session ID",
+              "value": "=21collagen6Nov2025",
+              "type": "string"
+            },
+            {
+              "id": "60ec7b85-f558-4bdf-b79d-f24907184718",
+              "name": "Business Data Session ID",
+              "value": "=cc86578",
+              "type": "string"
+            },
+            {
+              "id": "5705eb38-47fd-401d-b9a4-44cfb0b71afe",
+              "name": "location_code",
+              "value": "=2642",
+              "type": "string"
+            },
+            {
+              "id": "833bc73b-7f47-4d27-9ff5-e814028b1fe1",
+              "name": "language_code",
+              "value": "=ro",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        64
+      ],
+      "id": "399270d4-1484-47e6-a086-efa870206a98",
+      "name": "Session Data 👀"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6c06e31-347e-4d68-b960-09ca4cd9915b",
+              "name": "Topic or Keyword",
+              "value": "={{ $('On form submission').item.json['Topic or Keyword'] }}",
+              "type": "string"
+            },
+            {
+              "id": "84bd2faf-e558-4645-907a-f51742ca051a",
+              "name": "Content Type",
+              "value": "={{ $('On form submission').item.json['Content Type  Select the type of content you want ideas for'] }}",
+              "type": "string"
+            },
+            {
+              "id": "8427e003-e506-423f-bace-6be8a7c4bf31",
+              "name": "Audience Focus",
+              "value": "={{ $('On form submission').item.json['Audience Focus'] }}",
+              "type": "string"
+            },
+            {
+              "id": "fb03a47e-c335-490f-8a4e-14d43b317012",
+              "name": "Notes (Optional)",
+              "value": "={{ $('On form submission').item.json['Notes (Optional)'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        64
+      ],
+      "id": "768c9e45-5dbc-4799-be23-a03c9e72b5d6",
+      "name": "Form Data"
+    },
+    {
+      "parameters": {
+        "content": "`insert session data`",
+        "width": 182,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        32
+      ],
+      "id": "7d1862f2-1475-4e18-86e0-2ef208983944",
+      "name": "Sticky Note65"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "=# Online Search Agent - System Prompt (Optimized for EEAT Source Discovery)\n\nYou are a specialized search assistant trained to find authoritative sources for EEAT (Experience, Expertise, Authoritativeness, Trustworthiness) enhancement.\n\n## Your Mission\nFind and present high-quality, authoritative sources that match the user's query. Focus on discovering official websites, government agencies, academic institutions, medical organizations, and peer-reviewed research sources. Your results must help identify credible citations, NOT competitors.\n\n## Context Awareness\n**Date:** {{ $now.toFormat(\"dd LLLL yyyy\") }}\n**Market Focus:** {{ $json.client_country }}\n**Language:** {{ $json.client_language }}\n\n## Search Strategy for EEAT Sources\n\n### Priority Source Types (in order):\n1. **Government/Regulatory:** National health agencies, government research portals, regulatory bodies\n2. **Academic/Research:** Universities, peer-reviewed journals, research institutions\n3. **Medical Institutions:** Teaching hospitals, medical centers, clinics with research programs\n4. **Industry Authorities:** Professional associations, scientific societies, standards organizations\n5. **Scientific Journals:** Peer-reviewed publications and databases\n\n### Geographic Priority:\n1. {{ $json.client_country }}-specific sources (local authorities, universities, government agencies)\n2. Regional sources (e.g., EU agencies if applicable)\n3. International gold-standard sources (WHO, NIH, major medical institutions, peer-reviewed journals)\n\n## Search Results Presentation\n\nWhen returning search results, provide:\n\n1. **Source URL** - The exact, complete URL\n2. **Source Name** - Official organization/publication name\n3. **Source Type** - Categorize as: Government/Regulatory, Academic/Research, Medical Institution, Industry Authority, or Scientific Journal\n4. **Relevance Summary** - Brief description of what topics this source covers\n5. **Authority Indicators** - Why this source is trustworthy (e.g., \".gov domain\", \"peer-reviewed\", \"university research\", \"national agency\")\n6. **Geographic Context** - Specify if it's a {{ $json.client_country }} source, regional, or international\n\n### Output Format:\n```\n**1. [Source Name]**\n- URL: [complete URL]\n- Type: [Source Type]\n- Authority: [Why this is authoritative]\n- Geographic: [{{ $json.client_country }} (Local) / Regional / International]\n- Relevance: [Topics covered]\n- Key Content: [1-2 sentence summary of valuable information available]\n\n**2. [Source Name]**\n- URL: [complete URL]\n- Type: [Source Type]\n- Authority: [Why this is authoritative]\n- Geographic: [Geographic classification]\n- Relevance: [Topics covered]\n- Key Content: [1-2 sentence summary]\n```\n\n## Critical Filters - EXCLUDE These:\n\n❌ **Never return:**\n- Competitor websites (sites selling similar products/services)\n- Commercial product sites or e-commerce platforms\n- Affiliate marketing sites\n- News media, magazines, or blogs (even reputable ones)\n- Social media platforms or influencer content\n- Wikipedia or crowd-sourced encyclopedias\n- Content farms or article directories\n- Personal websites or blogs\n- Sites that primarily sell products in the same industry\n\n✅ **Always prioritize:**\n- .gov, .edu, .org domains from recognized organizations\n- Official institutional websites\n- Peer-reviewed research platforms\n- Professional medical/scientific associations\n- Government agencies\n\n## Search Query Optimization\n\nWhen the user provides a search query, automatically enhance it to find authoritative sources by adding qualifiers such as:\n- \"{{ $json.client_country }} [query] official\"\n- \"[query] government research\"\n- \"[query] university study\"\n- \"[query] peer-reviewed\"\n- \"[query] medical institution\"\n- \"[query] scientific journal\"\n\n## Citation Requirements\n- Cite search results using [index] notation: [1], [2], etc.\n- NO SPACE between the last word and the citation\n- Cite the most relevant results that answer the query\n\n## Content Guidelines\n\n- **Be comprehensive:** Return 5-10 relevant sources when possible\n- **Be selective:** Quality over quantity - only authoritative sources\n- **Be specific:** Include exact URLs, not just domain names\n- **Be clear:** Clearly indicate why each source is authoritative\n- **Skip preamble:** Get straight to presenting the sources\n- **No invented URLs:** Only return sources you actually found in search results\n- **Geographic awareness:** Prioritize {{ $json.client_country }} sources when relevant, but include international authorities\n\n## Response Language\n- Write source descriptions and summaries in {{ $json.client_language }}\n- Keep source names and URLs in their original form\n- Use {{ $json.client_country }}-appropriate terminology\n\n## Market Context Adaptation\n\nFor {{ $json.client_country }} market:\n- Prioritize local regulatory bodies and government agencies\n- Include {{ $json.client_country }} universities and research institutions\n- Consider regional authorities (e.g., EU agencies for European countries)\n- Balance local credibility with international scientific authority\n\nNow execute the search based on the user's query, focusing on finding authoritative, non-competitor sources.",
+              "role": "system"
+            },
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message1_Text', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {
+          "returnRelatedQuestions": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        592,
+        240
+      ],
+      "id": "545fc49e-7e07-431f-966c-0bdffbb2ec2b",
+      "name": "Online_search",
+      "credentials": {
+        "perplexityApi": {
+          "id": "zYJVzWohvdoOiRYB",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### **`get_businesss_data`** tool Inputs:\n* Function: `Get`\n* Must Match: `All Conditions`\n* session_id: `{{ $('Session Data 👀').first().json['Business Data Session ID'] }}`",
+        "height": 112,
+        "width": 656,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        448,
+        400
+      ],
+      "id": "067bce48-f74b-4142-bdb4-1c65eda52c2b",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Screenshot%202025-11-02%20155136.png)",
+        "height": 112,
+        "width": 256,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        400
+      ],
+      "id": "b4d6e116-ee31-4c3b-b77a-a8000c8b7fec",
+      "name": "Sticky Note33"
+    },
+    {
+      "parameters": {
+        "content": "### **serp_search** Sub-workflow inputs:\n* function: `serp_search`\n* keyword: Defined automatically by the model\n* location_code: `{{ $('Session Data 👀').item.json.location_code }}`\n* language_code: `{{ $('Session Data 👀').item.json.language_code }}`",
+        "height": 128,
+        "width": 544,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        448,
+        528
+      ],
+      "id": "b8f92fd7-6000-4ab8-a5a8-9862b141532e",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Screenshot%202025-11-02%20155642.png)",
+        "height": 128,
+        "width": 256,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        528
+      ],
+      "id": "cebf70a6-db5c-4781-a79a-abeedfed896c",
+      "name": "Sticky Note34"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Screenshot%202025-11-02%20155725.png)",
+        "width": 256,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        672
+      ],
+      "id": "160427b8-2422-4ddc-8eb4-64198a1c45d6",
+      "name": "Sticky Note35"
+    },
+    {
+      "parameters": {
+        "content": "### **`insert_topic_in_sheets`** Tool Input\n* Date: `{{ $now.toFormat(\"dd LLLL yyy\") }}`\n* Topic input: `{{ $json['Topic or Keyword'] }}`\n* Title: Defined automatically by the model\n* Description: Defined automatically by the model\n* Status: Select",
+        "width": 384,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        448,
+        672
+      ],
+      "id": "3649d519-1bda-466d-b86e-0905586ca73b",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "`Will create for you topics based on input, nice and simple`",
+        "height": 80,
+        "width": 208,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -112
+      ],
+      "id": "ffa5012e-223a-4254-b709-b067c0cc8796",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-a17d2fc7266e4743b378a51308926c96.r2.dev/Rankenstein%20v9.png)",
+        "height": 336,
+        "width": 656,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -448
+      ],
+      "id": "4d5ef8ea-c3fe-4b41-baa4-0786b8906b4e",
+      "name": "Sticky Note38"
+    },
+    {
+      "parameters": {
+        "content": "## Rankenstein v9 ->  Step 4 - Topic Creation\n## 1. Insert the Session IDs from Part 1 & 2 \nYou need the internal links & business analysis session id. Insert them in the `Session data 👀` node marked with red.\n\n## **2. Select the Business Data Table in the 3d node**\n in `Get business data` node (the Third node), select the Business Data Table. Make sure it is set as `Get`. \n   * Session_id = `{{ $json['Business Data Session ID'] }}`\n\n## **3. Configure the AI Agent 🤖**\nYou'll need to add your **Gemini** API key in the `Topic Ideator` AI Agent. \n### **Topic Ideator**\n* **Model:** Gemini 2.5 Flash\n* **Connections:**\n  * `online_search` → **Perplexity**\n  * `url_search` → **Firecrawl**\n  * `serp_search` → **Part 0 - Tools (Sub-workflow)**\n  * `get_Business_data` → **Business Data Table**\n  * `insert_topic_in_sheets` -> **Our Main Sheets Dashboard** \n\n## **4. Google Sheets**\nMake a copy of this [google sheets](https://docs.google.com/spreadsheets/d/1HuKg1bh2oY4SZnjZMyn-yWUCPo_1ZqjoNkdtoHLUhUk/edit?usp=sharing)\nAfter you copied the sheets, connect the `insert_topic_in_sheets` tool to the sheets and follow the example on the right. \n   * After you've set it up, set the workflow to `Active`, copy the **Form** `production url` and insert it as 'Link' to the `👉 Submit Form`  button in the copied sheets (Campaign Start).\n\n",
+        "height": 752,
+        "width": 624,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        224
+      ],
+      "id": "7c7d20f6-cc85-451c-80ca-5661c7cdc95d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "![n8n Creator Profile](https://pub-70c57f6d49284d1da8650039c2add836.r2.dev/ai%20marketing%20hub.png)",
+        "height": 176,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -288
+      ],
+      "id": "31ed820e-9cab-49dd-937f-c8236799d3a8",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "**Workflow created by [@AgriciDaniel](https://www.youtube.com/@AgriciDaniel)**\n* [AI Marketing Hub](https://www.skool.com/ai-marketing-hub)\n* [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro)",
+        "height": 96,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -128
+      ],
+      "id": "888048af-9ed3-4d6c-9dcc-4b71f6709e1f",
+      "name": "Sticky Note9"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Session Data 👀",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Business data": {
+      "main": [
+        [
+          {
+            "node": "Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think_ToOl": {
+      "ai_tool": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Business_daTa": {
+      "ai_tool": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "serp_SearcH": {
+      "ai_tool": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_topic_in_sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Session Data 👀": {
+      "main": [
+        [
+          {
+            "node": "Get Business data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Data": {
+      "main": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Online_search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Topic Ideator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "41e4e652-1054-4d7f-9cc3-cedcf69ab8f4",
+  "meta": {
+    "instanceId": "1ee7b11b3a4bb285563e32fdddf3fbac26379ada529b942ee7cda230735046a1"
+  },
+  "id": "ahgYohy8y8wD1WLf",
+  "tags": []
+}
